@@ -1,0 +1,1 @@
+Remote SSH login to the device and issue configuration
