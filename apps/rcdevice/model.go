@@ -1,23 +1,17 @@
 package rcdevice
 
-//需要被远程控制的设备
+//设备
 type Device struct {
+	Name          string `json:"name"`
+	RemoteAddress string `json:"remote_address"`
+	Port          string `json:"port"`
+	Username      string `json:"username"`
+	Password      string `json:"password"`
 }
 
-//对应机房能被远程控制的设备集
-type DeviceSet struct {
+func NewDevice() {
+
 }
 
-//机房
-type DataCenter struct {
+type ChangedConfigRequest struct {
 }
-
-//机房集合
-type DataCenterSet struct {
-}
-
-//新建被远程控制设备请求
-type CreateDeviceRequest struct {
-}
-
-//
