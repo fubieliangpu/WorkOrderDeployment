@@ -14,7 +14,7 @@ type Device struct {
 	*ChangedDeviceStatusRequest
 }
 
-func NewDevice(svridc string) *Device {
+func NewDevice() *Device {
 	return &Device{
 		common.NewDevMeta(),
 		NewCreateDeviceRequest(),
