@@ -28,3 +28,10 @@ func TestNewDeviceSet(t *testing.T) {
 	ins.Total = int64(len(ins.Items))
 	fmt.Printf("%+v\n", ins)
 }
+
+func TestCreateDeviceRequest(t *testing.T) {
+	req := rcdevice.NewCreateDeviceRequest().SetDevice("test1", "192.168.79.1", "22")
+	validateres := req.Validate()
+	t.Log(req)
+	t.Log(validateres)
+}
