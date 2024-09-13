@@ -60,7 +60,7 @@ func (req *CreateDeviceRequest) String() string {
 
 // 检验是否已存在设备清单
 type ChangedDeviceStatusRequest struct {
-	ChangedAt int64 `json:"create_at" gorm:"column:create_at"`
+	ChangedAt int64 `json:"change_at" gorm:"column:change_at"`
 	//设备状态信息，创建、修改、删除
 	Status *Status `json:"status" gorm:"column:status"`
 }

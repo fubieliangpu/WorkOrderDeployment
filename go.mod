@@ -4,6 +4,8 @@ go 1.21.5
 
 require golang.org/x/crypto v0.27.0 // indirect
 
+require dario.cat/mergo v1.0.1
+
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect

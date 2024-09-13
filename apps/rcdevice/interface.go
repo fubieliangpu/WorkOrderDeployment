@@ -52,6 +52,7 @@ func NewDescribeDeviceRequest(dsname string) *DescribeDeviceRequest {
 type UpdateDeviceRequest struct {
 	DeviceName           string `json:"device_name"`
 	*CreateDeviceRequest `validate:"required"`
+	UpdateMode           common.UPDATE_MODE `json:"update_mode"`
 }
 
 func (req *UpdateDeviceRequest) Validate() error {
@@ -62,6 +63,7 @@ func NewUpdateDeviceRequest(dsname string) *UpdateDeviceRequest {
 	return &UpdateDeviceRequest{
 		DeviceName:          dsname,
 		CreateDeviceRequest: NewCreateDeviceRequest(),
+		UpdateMode:          common.UPDATE_MODE_PUT,
 	}
 }
 
@@ -77,7 +79,7 @@ func NewDeleteDeviceRequest(dsname string) *DeleteDeviceRequest {
 
 type ChangeDeviceConfigRequest struct {
 	DeviceName   string `json:"device_name" validate:"required"`
-	DeviceConfig string `json:"device_config"`
+	DeviceConfig string `json:"device_config" validate:"required"`
 }
 
 func (req *ChangeDeviceConfigRequest) Validate() error {

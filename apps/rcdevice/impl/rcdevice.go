@@ -3,7 +3,9 @@ package impl
 import (
 	"context"
 
+	"dario.cat/mergo"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
+	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 )
 
@@ -41,9 +43,82 @@ func (i *DeviceServiceImpl) QueryDeviceList(ctx context.Context, in *rcdevice.Qu
 	//查找数据库，构造查询条件
 	query := i.db.WithContext(ctx).Table("devices")
 	if in.KeyWords != "" {
-		query = query.Where("title LIKE ?", "%"+in.KeyWords+"%")
+		query = query.Where("idc LIKE ?", "%"+in.KeyWords+"%")
 	}
 	if in.Status != nil {
 		query = query.Where("status = ?", *in.Status)
 	}
+
+	//Count,查询总数统计
+	err := query.Count(&set.Total).Error
+	if err != nil {
+		return nil, err
+	}
+
+	//查询
+	err = query.Order("change_at DESC").Limit(in.PageSize).Offset(in.Offset()).Find(&set.Items).Error
+	if err != nil {
+		return nil, err
+	}
+	return set, nil
+}
+
+// 设备条目更新
+func (i *DeviceServiceImpl) UpdateDevice(ctx context.Context, in *rcdevice.UpdateDeviceRequest) (*rcdevice.Device, error) {
+	//首先查询需要更新的对象
+	ins, err := i.DescribeDevice(ctx, rcdevice.NewDescribeDeviceRequest(in.DeviceName))
+	if err != nil {
+		return nil, err
+	}
+	switch in.UpdateMode {
+	case common.UPDATE_MODE_PUT:
+		ins.CreateDeviceRequest = in.CreateDeviceRequest
+	case common.UPDATE_MODE_PATCH:
+		err := mergo.MergeWithOverwrite(ins.CreateDeviceRequest, in.CreateDeviceRequest)
+		if err != nil {
+			return nil, err
+		}
+	}
+	//更新字段校验
+	if err := ins.CreateDeviceRequest.Validate(); err != nil {
+		return nil, exception.ErrValidateFailed(err.Error())
+	}
+
+	//执行更新
+	ins.ChangedDeviceStatusRequest.SetStatus(rcdevice.STATUS_MODIFIED)
+	err = i.db.WithContext(ctx).Table("devices").Save(ins).Error
+	if err != nil {
+		return nil, err
+	}
+	return ins, nil
+}
+
+// 设备条目删除
+func (i *DeviceServiceImpl) DeleteDevice(ctx context.Context, in *rcdevice.DeleteDeviceRequest) (*rcdevice.Device, error) {
+	//首先查询需要删除的设备
+	ins, err := i.DescribeDevice(ctx, rcdevice.NewDescribeDeviceRequest(in.DeviceName))
+	if err != nil {
+		return nil, err
+	}
+
+	err = i.db.WithContext(ctx).Table("devices").Where("name = ?", in.DeviceName).Delete(&rcdevice.Device{}).Error
+	if err != nil {
+		return nil, err
+	}
+	return ins, nil
+}
+
+// 设备配置修改
+func (i *DeviceServiceImpl) ChangeDeviceConfig(ctx context.Context, in *rcdevice.ChangeDeviceConfigRequest) (*rcdevice.Device, error) {
+	//首先要验证合法性
+	if err := in.Validate(); err != nil {
+		return nil, exception.ErrValidateFailed(err.Error())
+	}
+	//根据设备名查询设备地址端口等信息
+	ins, err := i.DescribeDevice(ctx, rcdevice.NewDescribeDeviceRequest(in.DeviceName))
+	if err != nil {
+		return nil, err
+	}
+	//将查询到的IP和端口信息用于SSH配置下发
+
 }
