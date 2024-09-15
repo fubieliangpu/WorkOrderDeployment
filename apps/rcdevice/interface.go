@@ -2,8 +2,16 @@ package rcdevice
 
 import (
 	"context"
+	"fmt"
+	"log"
+	"os"
 
 	"github.com/fubieliangpu/WorkOrderDeployment/common"
+	"golang.org/x/crypto/ssh"
+)
+
+const (
+	AppName = "rcdevice"
 )
 
 type Service interface {
@@ -84,6 +92,69 @@ type ChangeDeviceConfigRequest struct {
 
 func (req *ChangeDeviceConfigRequest) Validate() error {
 	return common.Validate(req)
+}
+
+type Configinfo struct {
+	Username   string
+	Password   string
+	Ip         string
+	Port       string
+	Protocol   string
+	Configfile string
+}
+
+func NewConfiginfo() *Configinfo {
+	return &Configinfo{
+		Port:       "22",
+		Protocol:   "tcp",
+		Configfile: "config.txt",
+	}
+}
+
+func SshConfigTool(cfi *Configinfo) {
+	config := &ssh.ClientConfig{
+		User: cfi.Username,
+		Auth: []ssh.AuthMethod{
+			ssh.Password(cfi.Password),
+		},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+	svr := fmt.Sprintf("%s:%s", cfi.Ip, cfi.Port)
+	client, err := ssh.Dial(cfi.Protocol, svr, config)
+	if err != nil {
+		log.Fatal("Fail to dial: ", err)
+	}
+
+	defer client.Close()
+
+	session, err := client.NewSession()
+	if err != nil {
+		log.Fatal("Fail to dial: ", err)
+	}
+	defer session.Close()
+
+	modes := ssh.TerminalModes{
+		ssh.ECHO:          0,
+		ssh.TTY_OP_ISPEED: 14400,
+		ssh.TTY_OP_OSPEED: 14400,
+	}
+	if err := session.RequestPty("linux", 200, 200, modes); err != nil {
+		log.Fatal("request for pseudo terminal failed: ", err)
+	}
+
+	fdd, _ := os.Open(cfi.Configfile)
+	defer fdd.Close()
+	session.Stdout = os.Stdout
+	session.Stdin = fdd
+	session.Stderr = os.Stderr
+	if err := session.Shell(); err != nil {
+		log.Fatal("failed to start shell: ", err)
+	}
+
+	err = session.Wait()
+	if err != nil {
+		log.Fatal("Failed to run: " + err.Error())
+	}
 }
 
 func NewChangeDeviceConfigRequest(dsname string) *ChangeDeviceConfigRequest {

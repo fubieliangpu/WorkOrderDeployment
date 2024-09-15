@@ -9,23 +9,28 @@ import (
 
 // 设备
 type Device struct {
-	*common.DevMeta
+	//*common.DevMeta
 	*CreateDeviceRequest
 	*ChangedDeviceStatusRequest
 }
 
 func NewDevice() *Device {
 	return &Device{
-		common.NewDevMeta(),
+		//common.NewDevMeta(),
 		NewCreateDeviceRequest(),
 		NewChangedDeviceStatusRequest(),
 	}
 }
 
 func (req *Device) SetIDC(svridc string) *Device {
-	req.DevMeta.IDC = svridc
+	req.Idc = svridc
 	return req
 }
+
+// func (req *Device) SetBrand(svrbrd int) *Device {
+// 	req.DevMeta.Brand = common.BRAND(svrbrd)
+// 	return req
+// }
 
 func (req *Device) String() string {
 	dj, _ := json.MarshalIndent(req, "", "	")
@@ -37,14 +42,16 @@ type CreateDeviceRequest struct {
 	Name       string `json:"name" gorm:"column:name" validate:"required"`
 	ServerAddr string `json:"server_addr" gorm:"column:server_addr" validate:"required"`
 	Port       string `json:"port" gorm:"column:port" validate:"required"`
+	Idc        string `json:"idc" gorm:"column:idc" validate:"required"`
+	Brand      int    `json:"brand" gorm:"column:brand" validate:"required"`
 }
 
 func NewCreateDeviceRequest() *CreateDeviceRequest {
 	return &CreateDeviceRequest{}
 }
 
-func (req *CreateDeviceRequest) SetDevice(svrname, svraddr, svrport string) *CreateDeviceRequest {
-	req.Name, req.ServerAddr, req.Port = svrname, svraddr, svrport
+func (req *CreateDeviceRequest) SetDevice(svrname, svraddr, svrport, idc string, brand int) *CreateDeviceRequest {
+	req.Name, req.ServerAddr, req.Port, req.Idc, req.Brand = svrname, svraddr, svrport, idc, brand
 	return req
 }
 

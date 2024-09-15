@@ -27,6 +27,8 @@ func (i *DeviceServiceImpl) CreateDevice(ctx context.Context, in *rcdevice.Creat
 	}
 	//2.构造实例对象
 	ins := rcdevice.NewDevice()
+	//ins.SetIDC(in.Idc).SetBrand(in.Brand)
+	ins.SetStatus(rcdevice.STATUS_CREATED)
 	ins.CreateDeviceRequest = in
 
 	//3.入库返回
@@ -120,5 +122,8 @@ func (i *DeviceServiceImpl) ChangeDeviceConfig(ctx context.Context, in *rcdevice
 		return nil, err
 	}
 	//将查询到的IP和端口信息用于SSH配置下发
+	ncfi := rcdevice.NewConfiginfo()
+	ncfi.Ip, ncfi.Port = ins.ServerAddr, ins.Port
 
+	return ins, nil
 }

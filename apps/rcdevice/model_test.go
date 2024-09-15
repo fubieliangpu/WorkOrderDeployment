@@ -1,14 +1,13 @@
 package rcdevice_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
 )
 
 func TestNewDevice(t *testing.T) {
-	ins := rcdevice.NewDevice()
+	ins := rcdevice.NewDevice() //.SetIDC("hyc").SetBrand(2)
 	t.Log(ins.CreateDeviceRequest)
 }
 
@@ -26,11 +25,11 @@ func TestNewDeviceSet(t *testing.T) {
 		//fmt.Printf("%T,%[1]v\n", rcdevice.NewDevice().SetIDC(idclist[i]))
 	}
 	ins.Total = int64(len(ins.Items))
-	fmt.Printf("%+v\n", ins)
+	t.Log(ins)
 }
 
 func TestCreateDeviceRequest(t *testing.T) {
-	req := rcdevice.NewCreateDeviceRequest().SetDevice("test1", "192.168.79.1", "22")
+	req := rcdevice.NewCreateDeviceRequest().SetDevice("test1", "192.168.79.1", "22", "hyc", 2)
 	validateres := req.Validate()
 	t.Log(req)
 	t.Log(validateres)
