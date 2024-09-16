@@ -22,3 +22,19 @@ func ErrValidateFailed(format string, a ...any) *ApiException {
 		Message: fmt.Sprintf(format, a...),
 	}
 }
+
+//没能成功读取文件
+func ErrOpenFileFailed(format string, a ...any) *ApiException {
+	return &ApiException{
+		Code:    50005,
+		Message: fmt.Sprintf(format, a...),
+	}
+}
+
+//没能成功解析设备登录的用户信息的yaml文件
+func ErrParseFileFailed(format string, a ...any) *ApiException {
+	return &ApiException{
+		Code:    50008,
+		Message: fmt.Sprintf(format, a...),
+	}
+}

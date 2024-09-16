@@ -7,7 +7,9 @@ import (
 	"os"
 
 	"github.com/fubieliangpu/WorkOrderDeployment/common"
+	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 	"golang.org/x/crypto/ssh"
+	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -25,10 +27,10 @@ type Service interface {
 	UpdateDevice(context.Context, *UpdateDeviceRequest) (*Device, error)
 	//设备删除
 	DeleteDevice(context.Context, *DeleteDeviceRequest) (*Device, error)
-	//设备配置变更
+	//设备配置变更或查询或状态查询
 	ChangeDeviceConfig(context.Context, *ChangeDeviceConfigRequest) (*Device, error)
-	//设备配置或状态查询
-	QueryDeviceConfig(context.Context, *QueryDeviceConfigRequest) (string, error)
+	// //设备配置或状态查询
+	// QueryDeviceConfig(context.Context, *QueryDeviceConfigRequest) (string, error)
 }
 
 type QueryDeviceListRequest struct {
@@ -86,36 +88,53 @@ func NewDeleteDeviceRequest(dsname string) *DeleteDeviceRequest {
 }
 
 type ChangeDeviceConfigRequest struct {
-	DeviceName   string `json:"device_name" validate:"required"`
-	DeviceConfig string `json:"device_config" validate:"required"`
+	DeviceName       string `json:"device_name" validate:"required"`
+	DeviceConfigFile string `json:"device_config_file" validate:"required"`
+	UserFile         string `json:"user_file" validate:"required"`
 }
 
 func (req *ChangeDeviceConfigRequest) Validate() error {
 	return common.Validate(req)
 }
 
-type Configinfo struct {
-	Username   string
-	Password   string
+type DeviceUserInfo struct {
+	Username string
+	Password string
+}
+
+type ConfigInfo struct {
+	UserInfo   *DeviceUserInfo
 	Ip         string
 	Port       string
 	Protocol   string
 	Configfile string
 }
 
-func NewConfiginfo() *Configinfo {
-	return &Configinfo{
-		Port:       "22",
-		Protocol:   "tcp",
-		Configfile: "config.txt",
-	}
+func NewConfigInfo() *ConfigInfo {
+	return &ConfigInfo{}
 }
 
-func SshConfigTool(cfi *Configinfo) {
+// 从yaml文件读取登录设备的用户名密码
+func LoadUsernmPasswdFromYaml(userpath string) (*DeviceUserInfo, error) {
+	deviceuserinfo := &DeviceUserInfo{}
+	content, err := os.ReadFile(userpath)
+	if err != nil {
+		return nil, exception.ErrOpenFileFailed(err.Error())
+	}
+
+	err = yaml.Unmarshal(content, deviceuserinfo)
+	if err != nil {
+		return nil, exception.ErrParseFileFailed(err.Error())
+	}
+
+	return deviceuserinfo, nil
+}
+
+func SshConfigTool(cfi *ConfigInfo) {
 	config := &ssh.ClientConfig{
-		User: cfi.Username,
+		User: cfi.UserInfo.Username,
 		Auth: []ssh.AuthMethod{
-			ssh.Password(cfi.Password),
+			ssh.Password(cfi.UserInfo.Password),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
@@ -144,6 +163,7 @@ func SshConfigTool(cfi *Configinfo) {
 
 	fdd, _ := os.Open(cfi.Configfile)
 	defer fdd.Close()
+	//这里输入输出后面改成文件
 	session.Stdout = os.Stdout
 	session.Stdin = fdd
 	session.Stderr = os.Stderr
@@ -157,23 +177,26 @@ func SshConfigTool(cfi *Configinfo) {
 	}
 }
 
-func NewChangeDeviceConfigRequest(dsname string) *ChangeDeviceConfigRequest {
+func NewChangeDeviceConfigRequest(dsname, cfile, ufile string) *ChangeDeviceConfigRequest {
 	return &ChangeDeviceConfigRequest{
-		DeviceName: dsname,
+		DeviceName:       dsname,
+		DeviceConfigFile: cfile,
+		UserFile:         ufile,
 	}
 }
 
-type QueryDeviceConfigRequest struct {
-	DeviceName string `json:"device_name" validate:"required"`
-	Command    string `json:"command"`
-}
+// 似乎不需要特别定义查询，复用配置修改就可以实现，后面完善sshtool的返回类型和输出就行
+// type QueryDeviceConfigRequest struct {
+// 	DeviceName  string `json:"device_name" validate:"required"`
+// 	CommandFile string `json:"command"`
+// }
 
-func (req *QueryDeviceConfigRequest) Validate() error {
-	return common.Validate(req)
-}
+// func (req *QueryDeviceConfigRequest) Validate() error {
+// 	return common.Validate(req)
+// }
 
-func NewQueryDeviceConfigRequest(dsname string) *QueryDeviceConfigRequest {
-	return &QueryDeviceConfigRequest{
-		DeviceName: dsname,
-	}
-}
+// func NewQueryDeviceConfigRequest(dsname string) *QueryDeviceConfigRequest {
+// 	return &QueryDeviceConfigRequest{
+// 		DeviceName: dsname,
+// 	}
+// }

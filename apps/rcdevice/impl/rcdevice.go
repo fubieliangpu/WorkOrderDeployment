@@ -121,9 +121,16 @@ func (i *DeviceServiceImpl) ChangeDeviceConfig(ctx context.Context, in *rcdevice
 	if err != nil {
 		return nil, err
 	}
-	//将查询到的IP和端口信息用于SSH配置下发
-	ncfi := rcdevice.NewConfiginfo()
-	ncfi.Ip, ncfi.Port = ins.ServerAddr, ins.Port
 
+	//将查询到的IP和端口信息用于SSH配置下发
+	ncfi := rcdevice.NewConfigInfo()
+	ncfi.Ip, ncfi.Port, ncfi.Configfile = ins.ServerAddr, ins.Port, in.DeviceConfigFile
+	//如果加载设备登录用户名密码错误，则抛出自定义错误
+	ncfi.UserInfo, err = rcdevice.LoadUsernmPasswdFromYaml(in.UserFile)
+	if err != nil {
+		return nil, err
+	}
+	//核心操作，SSH登录设备并修改配置
+	rcdevice.SshConfigTool(ncfi)
 	return ins, nil
 }
