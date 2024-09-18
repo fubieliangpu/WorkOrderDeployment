@@ -8,8 +8,8 @@ import (
 )
 
 func DevelopmentSetup() {
-	// 加载配置, 单元测试 通过环境变量读取, vscode 传递进来的
-	if err := conf.LoadConfigFromEnv(); err != nil {
+	// 加载配置, 单元测试 通过环境变量/配置文件读取, vscode 传递进来的
+	if err := conf.LoadConfigFromYaml("../../../conf/application.yml"); err != nil {
 		panic(err)
 	}
 	//init ioc

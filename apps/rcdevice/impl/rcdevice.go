@@ -73,9 +73,9 @@ func (i *DeviceServiceImpl) UpdateDevice(ctx context.Context, in *rcdevice.Updat
 		return nil, err
 	}
 	switch in.UpdateMode {
-	case common.UPDATE_MODE_PUT:
+	case common.UPDATE_MODE_PUT: //如果是枚举类型，如Brand，不在枚举类型内则正常修改，但是值为0则报错Key: 'CreateDeviceRequest.Brand' Error:Field validation for 'Brand' failed on the 'required' tag
 		ins.CreateDeviceRequest = in.CreateDeviceRequest
-	case common.UPDATE_MODE_PATCH:
+	case common.UPDATE_MODE_PATCH: //如果是枚举类型，如Brand，不在枚举类型内则正常修改,但是值为0则跳过
 		err := mergo.MergeWithOverwrite(ins.CreateDeviceRequest, in.CreateDeviceRequest)
 		if err != nil {
 			return nil, err

@@ -5,7 +5,8 @@ import (
 
 	_ "github.com/fubieliangpu/WorkOrderDeployment/apps"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
-	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice/test"
+	"github.com/fubieliangpu/WorkOrderDeployment/test"
+
 	"github.com/fubieliangpu/WorkOrderDeployment/ioc"
 )
 
