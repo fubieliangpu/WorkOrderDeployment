@@ -126,7 +126,8 @@ func (i *DeviceServiceImpl) ChangeDeviceConfig(ctx context.Context, in *rcdevice
 	ncfi := rcdevice.NewConfigInfo()
 	ncfi.Ip, ncfi.Port, ncfi.Configfile = ins.ServerAddr, ins.Port, in.DeviceConfigFile
 	//如果加载设备登录用户名密码错误，则抛出自定义错误
-	ncfi.UserInfo, err = rcdevice.LoadUsernmPasswdFromYaml(in.UserFile)
+	nufi := rcdevice.NewDeviceUserInfo()
+	ncfi.UserInfo, err = rcdevice.LoadUsernmPasswdFromYaml(in.UserFile, nufi)
 	if err != nil {
 		return nil, err
 	}

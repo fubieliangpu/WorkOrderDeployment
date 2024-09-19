@@ -1,0 +1,6 @@
+system-view
+int lo100
+ip add 10.121.111.111 32
+dis ip int brief
+return
+exit

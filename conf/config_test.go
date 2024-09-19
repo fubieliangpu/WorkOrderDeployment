@@ -12,7 +12,7 @@ func TestToYAML(t *testing.T) {
 }
 
 func TestToLoadFromYAML(t *testing.T) {
-	err := conf.LoadConfigFromYaml("./application.yml")
+	err := conf.LoadConfigFromYaml("../apps/rcdevice/impl/user.yml")
 	if err != nil {
 		t.Fatal(err)
 	}

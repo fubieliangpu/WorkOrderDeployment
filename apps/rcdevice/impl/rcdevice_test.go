@@ -1,6 +1,7 @@
 package impl_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
@@ -72,6 +73,25 @@ func TestPutUpdateDevice(t *testing.T) {
 func TestDeleteDevice(t *testing.T) {
 	req := rcdevice.NewDeleteDeviceRequest("test")
 	ins, err := serviceImpl.DeleteDevice(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
+func TestLoadPasswordFromYAML(t *testing.T) {
+	req := rcdevice.NewDeviceUserInfo()
+	ins, err := rcdevice.LoadUsernmPasswdFromYaml("./user.yml", req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
+func TestChangeDeviceConfig(t *testing.T) {
+	req := rcdevice.NewChangeDeviceConfigRequest("HYC-6890-01", "h3c-config.txt", "user.yml")
+	ins, err := serviceImpl.ChangeDeviceConfig(ctx, req)
+	fmt.Println(ins.ServerAddr)
 	if err != nil {
 		t.Fatal(err)
 	}

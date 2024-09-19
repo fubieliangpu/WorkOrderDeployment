@@ -98,12 +98,16 @@ func (req *ChangeDeviceConfigRequest) Validate() error {
 }
 
 type DeviceUserInfo struct {
-	Username string
-	Password string
+	Username string `toml:"username" yaml:"username" json:"username"`
+	Password string `toml:"password" yaml:"password" json:"password"`
+}
+
+func NewDeviceUserInfo() *DeviceUserInfo {
+	return &DeviceUserInfo{}
 }
 
 type ConfigInfo struct {
-	UserInfo   *DeviceUserInfo
+	UserInfo   *DeviceUserInfo `toml:"userinfo" yaml:"userinfo" json:"userinfo"`
 	Ip         string
 	Port       string
 	Protocol   string
@@ -111,12 +115,13 @@ type ConfigInfo struct {
 }
 
 func NewConfigInfo() *ConfigInfo {
-	return &ConfigInfo{}
+	return &ConfigInfo{
+		Protocol: "tcp",
+	}
 }
 
 // 从yaml文件读取登录设备的用户名密码
-func LoadUsernmPasswdFromYaml(userpath string) (*DeviceUserInfo, error) {
-	deviceuserinfo := &DeviceUserInfo{}
+func LoadUsernmPasswdFromYaml(userpath string, deviceuserinfo *DeviceUserInfo) (*DeviceUserInfo, error) {
 	content, err := os.ReadFile(userpath)
 	if err != nil {
 		return nil, exception.ErrOpenFileFailed(err.Error())
