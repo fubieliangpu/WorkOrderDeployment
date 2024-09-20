@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 // 设备通用参数
 type DevMeta struct {
 	// 设备Id
@@ -21,6 +23,12 @@ const (
 	Huawei_FW
 	Juniper
 )
+
+func NewUserMeta() *UserMeta {
+	return &UserMeta{
+		CreateAt: time.Now().Unix(),
+	}
+}
 
 //用户通用参数
 type UserMeta struct {
