@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 
+	"github.com/fubieliangpu/WorkOrderDeployment/apps/token"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/user"
 	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/conf"
@@ -18,11 +19,13 @@ func init() {
 
 type UserServiceImpl struct {
 	db *gorm.DB
+	tk token.Service
 }
 
 // 实现Init之后才能满足ioc.Object的要求
 func (i *UserServiceImpl) Init() error {
 	i.db = conf.C().MySQL.GetDB()
+	i.tk = ioc.Controller.Get(token.AppName).(token.Service)
 	return nil
 }
 
@@ -71,9 +74,73 @@ func (i *UserServiceImpl) QueryUser(ctx context.Context, in *user.QueryUserReque
 }
 
 func (i *UserServiceImpl) DeleteUser(ctx context.Context, in *user.DeleteUserRequest) (*user.User, error) {
-	return nil, nil
+	//首先校验Token的有效性
+	tkreq := token.NewValidateTokenRequest(in.AccessToken)
+	tkins, err := i.tk.ValidateToken(ctx, tkreq)
+	if err != nil {
+		return nil, err
+	}
+	//校验用户身份是不是管理员
+	usqreq := user.NewQueryUserRequest()
+	usqreq.Username = tkins.UserName
+	uset, err := i.QueryUser(ctx, usqreq)
+	if err != nil {
+		return nil, err
+	}
+	//权限不为管理员则报错退出
+	if uset.Items[0].Role != user.ROLE_ADMIN {
+		return nil, user.ErrPermissionDeny
+	}
+
+	//判定下所删除用户名是否是自己，如果是自己就不能删除，毕竟自己不能把自己举起来
+	if uset.Items[0].Username == in.Username {
+		return nil, user.ErrSameUsername
+	}
+
+	//先删除令牌，再删除用户
+	err = i.db.WithContext(ctx).Table("tokens").Where("username = ?", in.Username).Delete(token.Token{}).Error
+	if err != nil {
+		return nil, err
+	}
+	err = i.db.WithContext(ctx).Table("users").Where("username = ?", in.Username).Delete(user.User{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return uset.Items[0], nil
 }
 
+// 修改用户密码
 func (i *UserServiceImpl) ChangeUser(ctx context.Context, in *user.ChangeUserRequest) (*user.User, error) {
-	return nil, nil
+	//首先校验Token的有效性
+	tkreq := token.NewValidateTokenRequest(in.AccessToken)
+	tkins, err := i.tk.ValidateToken(ctx, tkreq)
+	if err != nil {
+		return nil, err
+	}
+	//判断用户名是否相同，即普通用户也可以修改自己身密码
+	//校验用户身份是不是管理员
+	usqreq := user.NewQueryUserRequest()
+	usqreq.Username = tkins.UserName
+	uset, err := i.QueryUser(ctx, usqreq)
+	if err != nil {
+		return nil, err
+	}
+	if in.Username == tkins.UserName {
+		uset.Items[0].Password = in.Password
+		err = uset.Items[0].HashPassword()
+		return uset.Items[0], err
+	}
+	//权限不为管理员则报错退出
+	//如果权限是管理员，则修改密码
+	if uset.Items[0].Role != user.ROLE_ADMIN {
+		return nil, user.ErrPermissionDeny
+	} else if uset.Items[0].Role == user.ROLE_ADMIN {
+		uset.Items[0].Password = in.Password
+		err = uset.Items[0].HashPassword()
+		return uset.Items[0], err
+	} else {
+		return nil, err
+	}
+
 }

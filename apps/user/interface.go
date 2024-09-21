@@ -41,8 +41,24 @@ func NewQueryUserRequest() *QueryUserRequest {
 
 type DeleteUserRequest struct {
 	//需要校验用户令牌及用户身份
+	//需要被删除的用户名
+	Username string `json:"username"`
+	//以什么身份删除用户
+	AccessToken string `json:"access_token"`
+}
+
+func NewDeleteUserRequest() *DeleteUserRequest {
+	return &DeleteUserRequest{}
 }
 
 type ChangeUserRequest struct {
 	//需要校验登录用户名及所要删除用户的用户名
+	Username string `json:"username"`
+	Password string `json:"password"`
+	//以什么身份删除用户
+	AccessToken string `json:"access_token"`
+}
+
+func NewChangeUserRequest() *ChangeUserRequest {
+	return &ChangeUserRequest{}
 }
