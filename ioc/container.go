@@ -6,4 +6,9 @@ var Controller Container = &MapContainer{
 	storge: make(map[string]Object),
 }
 
-//
+//Api 所有的对外接口对象都放这里
+
+var Api Container = &MapContainer{
+	name:   "api",
+	storge: make(map[string]Object),
+}

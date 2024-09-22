@@ -96,7 +96,13 @@ func (i *UserServiceImpl) DeleteUser(ctx context.Context, in *user.DeleteUserReq
 	if uset.Items[0].Username == in.Username {
 		return nil, user.ErrSameUsername
 	}
-
+	//查询被删除用户
+	req := user.NewQueryUserRequest()
+	req.Username = in.Username
+	ruset, err := i.QueryUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 	//先删除令牌，再删除用户
 	err = i.db.WithContext(ctx).Table("tokens").Where("username = ?", in.Username).Delete(token.Token{}).Error
 	if err != nil {
@@ -106,8 +112,8 @@ func (i *UserServiceImpl) DeleteUser(ctx context.Context, in *user.DeleteUserReq
 	if err != nil {
 		return nil, err
 	}
-
-	return uset.Items[0], nil
+	//返回删了什么用户
+	return ruset.Items[0], nil
 }
 
 // 修改用户密码
@@ -121,7 +127,7 @@ func (i *UserServiceImpl) ChangeUser(ctx context.Context, in *user.ChangeUserReq
 	//判断用户名是否相同，即普通用户也可以修改自己身密码
 	//校验用户身份是不是管理员
 	usqreq := user.NewQueryUserRequest()
-	usqreq.Username = tkins.UserName
+	usqreq.Username = in.Username
 	uset, err := i.QueryUser(ctx, usqreq)
 	if err != nil {
 		return nil, err
@@ -129,15 +135,26 @@ func (i *UserServiceImpl) ChangeUser(ctx context.Context, in *user.ChangeUserReq
 	if in.Username == tkins.UserName {
 		uset.Items[0].Password = in.Password
 		err = uset.Items[0].HashPassword()
+		//持久化
+		if err := i.db.WithContext(ctx).Save(uset.Items[0]).Error; err != nil {
+			return nil, err
+		}
 		return uset.Items[0], err
 	}
 	//权限不为管理员则报错退出
 	//如果权限是管理员，则修改密码
-	if uset.Items[0].Role != user.ROLE_ADMIN {
+
+	usqreq.Username = tkins.UserName
+	//查询tk对应user是否为管理员
+	aduset, err := i.QueryUser(ctx, usqreq)
+	if aduset.Items[0].Role != user.ROLE_ADMIN {
 		return nil, user.ErrPermissionDeny
-	} else if uset.Items[0].Role == user.ROLE_ADMIN {
+	} else if aduset.Items[0].Role == user.ROLE_ADMIN {
 		uset.Items[0].Password = in.Password
 		err = uset.Items[0].HashPassword()
+		if err := i.db.WithContext(ctx).Save(uset.Items[0]).Error; err != nil {
+			return nil, err
+		}
 		return uset.Items[0], err
 	} else {
 		return nil, err
