@@ -190,6 +190,10 @@ func NewChangeDeviceConfigRequest(dsname, cfile, ufile string) *ChangeDeviceConf
 	}
 }
 
+type UpdateDeviceConfigRequest struct {
+	DeviceName string `json:"device_name" validate:"required"`
+}
+
 // 似乎不需要特别定义查询，复用配置修改就可以实现，后面完善sshtool的返回类型和输出就行
 // type QueryDeviceConfigRequest struct {
 // 	DeviceName  string `json:"device_name" validate:"required"`
