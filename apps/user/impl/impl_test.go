@@ -38,9 +38,9 @@ func TestCreateVisitorUser(t *testing.T) {
 
 func TestCreateAuthorUser(t *testing.T) {
 	req := user.NewCreateUserRuquest()
-	req.Username = "Admin1"
+	req.Username = "Visitor3"
 	req.Password = "123456"
-	req.Role = user.ROLE_ADMIN
+	req.Role = user.ROLE_VISITOR
 	ins, err := serviceImpl.CreateUser(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -95,7 +95,7 @@ func TestPasswordHash(t *testing.T) {
 // crnsm5914uficu1ve39g
 func TestDeleteUser(t *testing.T) {
 	req := user.NewDeleteUserRequest()
-	req.AccessToken = "crntt9114ufmu00pggs0"
+	//req.AccessToken = "crntt9114ufmu00pggs0"
 	req.Username = "Admin1"
 	ins, err := serviceImpl.DeleteUser(ctx, req)
 	if err != nil {
@@ -106,8 +106,8 @@ func TestDeleteUser(t *testing.T) {
 
 func TestChangeUser(t *testing.T) {
 	req := user.NewChangeUserRequest()
-	req.AccessToken = "crntt9114ufmu00pggs0"
-	req.Username = "visitor2"
+	//req.AccessToken = "crntt9114ufmu00pggs0"
+	req.Username = "Visitor3"
 	req.Password = "43211"
 	ins, err := serviceImpl.ChangeUser(ctx, req)
 	if err != nil {

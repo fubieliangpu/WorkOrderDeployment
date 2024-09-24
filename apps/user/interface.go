@@ -43,8 +43,8 @@ type DeleteUserRequest struct {
 	//需要校验用户令牌及用户身份
 	//需要被删除的用户名
 	Username string `json:"username"`
-	//以什么身份删除用户
-	AccessToken string `json:"access_token"`
+	//以什么身份删除用户,通过中间件鉴权
+	//AccessToken string `json:"access_token"`
 }
 
 func NewDeleteUserRequest() *DeleteUserRequest {
@@ -52,11 +52,11 @@ func NewDeleteUserRequest() *DeleteUserRequest {
 }
 
 type ChangeUserRequest struct {
-	//需要校验登录用户名及所要删除用户的用户名
+	//需要被修改的用户的用户名及期望的密码
 	Username string `json:"username"`
 	Password string `json:"password"`
-	//以什么身份删除用户
-	AccessToken string `json:"access_token"`
+	//以什么身份修改用户,鉴权交给中间件
+	//AccessToken string `json:"access_token"`
 }
 
 func NewChangeUserRequest() *ChangeUserRequest {

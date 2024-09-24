@@ -20,7 +20,9 @@ type TokenApiHandler struct {
 }
 
 func (h *TokenApiHandler) Registry(appRouter gin.IRouter) {
-	//待完善
+	//post /wod/api/v1/tokens/ --> Login
+	appRouter.POST("/", h.Login)
+	appRouter.DELETE("/", h.Logout)
 }
 
 func (h *TokenApiHandler) Init() error {

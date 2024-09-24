@@ -182,8 +182,10 @@ func SshConfigTool(cfi *ConfigInfo) {
 	}
 }
 
-func NewChangeDeviceConfigRequest() *ChangeDeviceConfigRequest {
-	return &ChangeDeviceConfigRequest{}
+func NewChangeDeviceConfigRequest(dsname string) *ChangeDeviceConfigRequest {
+	return &ChangeDeviceConfigRequest{
+		DeviceName: dsname,
+	}
 }
 
 // 似乎不需要特别定义查询，复用配置修改就可以实现，后面完善sshtool的返回类型和输出就行

@@ -134,7 +134,7 @@ func (h *RcDeviceApiHandler) DeleteDevice(ctx *gin.Context) {
 // 设备配置修改(相关状态查询) POST /wod/api/v1/rcdevice/{device_name}/config
 func (h *RcDeviceApiHandler) ChangeDeviceConfig(ctx *gin.Context) {
 	//获取用户请求
-	req := rcdevice.NewChangeDeviceConfigRequest()
+	req := rcdevice.NewChangeDeviceConfigRequest(ctx.Param("device_name"))
 	//body
 	if err := ctx.Bind(req); err != nil {
 		response.Failed(exception.ErrValidateFailed(err.Error()), ctx)
