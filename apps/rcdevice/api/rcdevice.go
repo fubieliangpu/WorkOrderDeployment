@@ -3,17 +3,26 @@ package api
 import (
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/token"
+	"github.com/fubieliangpu/WorkOrderDeployment/apps/user"
 	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 	"github.com/fubieliangpu/WorkOrderDeployment/ioc"
+	"github.com/fubieliangpu/WorkOrderDeployment/middleware"
 	"github.com/fubieliangpu/WorkOrderDeployment/response"
 	"github.com/gin-gonic/gin"
 )
 
 func (h *RcDeviceApiHandler) Registry(appRouter gin.IRouter) {
 	// 不需要鉴权，公开访问
-
+	appRouter.GET("/", h.QueryDeviceList)
+	appRouter.GET("/:device_name", h.DescribeDevice)
 	// 修改变更需要认证
+	appRouter.Use(middleware.Auth)
+	appRouter.POST("/", middleware.RequireRole(user.ROLE_ADMIN), h.CreateDevice)
+	appRouter.PUT("/:device_name", middleware.RequireRole(user.ROLE_ADMIN), h.PutUpdateDevice)
+	appRouter.PATCH("/:device_name", middleware.RequireRole(user.ROLE_ADMIN), h.PatchUpdateDevice)
+	appRouter.POST("/:device_name/config", middleware.RequireRole(user.ROLE_ADMIN), h.ChangeDeviceConfig)
+	appRouter.DELETE("/:device_name", middleware.RequireRole(user.ROLE_ADMIN), h.DeleteDevice)
 
 }
 
@@ -123,9 +132,20 @@ func (h *RcDeviceApiHandler) DeleteDevice(ctx *gin.Context) {
 }
 
 // 设备配置修改(相关状态查询) POST /wod/api/v1/rcdevice/{device_name}/config
-func (h *RcDeviceApiHandler) ChangeDeviceConfig(ctx *gin.Context)  {
+func (h *RcDeviceApiHandler) ChangeDeviceConfig(ctx *gin.Context) {
 	//获取用户请求
-	req := rcdevice.NewChangeDeviceConfigRequest(ctx.Param("device_name"),ctx.Param("device_config_file"),ctx.Param("user_file"))
+	req := rcdevice.NewChangeDeviceConfigRequest()
 	//body
-	if err := ctx.Bind(req)
+	if err := ctx.Bind(req); err != nil {
+		response.Failed(exception.ErrValidateFailed(err.Error()), ctx)
+		return
+	}
+
+	//业务处理
+	ins, err := h.svc.ChangeDeviceConfig(ctx.Request.Context(), req)
+	if err != nil {
+		response.Failed(err, ctx)
+		return
+	}
+	response.Success(ins, ctx)
 }
