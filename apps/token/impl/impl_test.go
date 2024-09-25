@@ -21,7 +21,7 @@ func init() {
 }
 
 func TestIssueToken(t *testing.T) {
-	req := token.NewIssueTokenRequest("Admin1", "65432111")
+	req := token.NewIssueTokenRequest("admin3", "43211")
 	tk, err := serviceImpl.IssueToken(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -30,7 +30,7 @@ func TestIssueToken(t *testing.T) {
 }
 
 func TestRevolkToken(t *testing.T) {
-	req := token.NewRevolkTokenRequest("crntklp14uflk1303k20", "crntklp14uflk1303k2g")
+	req := token.NewRevolkTokenRequest("crpnii8b6bt4mn20gdvg", "crpnii8b6bt4mn20ge00")
 	ins, err := serviceImpl.RevolkToken(ctx, req)
 	if err != nil {
 		t.Fatal(err)

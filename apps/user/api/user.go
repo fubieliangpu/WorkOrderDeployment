@@ -11,6 +11,8 @@ import (
 func (h *UserApiHandler) Registry(appRouter gin.IRouter) {
 	appRouter.Use(middleware.Auth)
 	appRouter.POST("/", middleware.RequireRole(user.ROLE_ADMIN), h.CreateUser)
+	appRouter.PATCH("/", middleware.RequireRole(user.ROLE_ADMIN), h.ChangeUser)
+	appRouter.DELETE("/", middleware.RequireRole(user.ROLE_ADMIN), h.DeleteUser)
 }
 
 // 创建用户 POST /wod/api/v1/users

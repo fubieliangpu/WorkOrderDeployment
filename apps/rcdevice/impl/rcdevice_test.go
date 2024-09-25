@@ -10,11 +10,11 @@ import (
 
 func TestCreateDevice(t *testing.T) {
 	req := rcdevice.NewCreateDeviceRequest()
-	req.Name = "FS-9850-01"
-	req.ServerAddr = "192.168.11.229"
+	req.Name = "test-5820-01"
+	req.ServerAddr = "10.172.0.123"
 	req.Port = "22"
 	req.Brand = 2
-	req.Idc = "HYC"
+	req.Idc = "RJJD"
 	ins, err := serviceImpl.CreateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -23,7 +23,7 @@ func TestCreateDevice(t *testing.T) {
 }
 
 func TestDescribeDevice(t *testing.T) {
-	req := rcdevice.NewDescribeDeviceRequest("RJJD-9850")
+	req := rcdevice.NewDescribeDeviceRequest("test-5820-01")
 	ins, err := serviceImpl.DescribeDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -45,9 +45,10 @@ func TestQueryDeviceList(t *testing.T) {
 }
 
 func TestPatchUpdateDevice(t *testing.T) {
-	req := rcdevice.NewUpdateDeviceRequest("FS-9850-01")
+	req := rcdevice.NewUpdateDeviceRequest("test-5820-02")
 	req.UpdateMode = common.UPDATE_MODE_PATCH
-	req.Brand = 0
+	req.Brand = 1
+	req.Name = "test-5820-03"
 	ins, err := serviceImpl.UpdateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -56,11 +57,11 @@ func TestPatchUpdateDevice(t *testing.T) {
 }
 
 func TestPutUpdateDevice(t *testing.T) {
-	req := rcdevice.NewUpdateDeviceRequest("test")
+	req := rcdevice.NewUpdateDeviceRequest("test-5820-01")
 	req.UpdateMode = common.UPDATE_MODE_PUT
-	req.Name = "test"
+	req.Name = "test-5820-02"
 	req.Brand = common.Huawei_FW
-	req.ServerAddr = "192.168.79.10"
+	req.ServerAddr = "10.172.0.123"
 	req.Port = "22"
 	req.Idc = "test"
 	ins, err := serviceImpl.UpdateDevice(ctx, req)
@@ -71,7 +72,7 @@ func TestPutUpdateDevice(t *testing.T) {
 }
 
 func TestDeleteDevice(t *testing.T) {
-	req := rcdevice.NewDeleteDeviceRequest("test")
+	req := rcdevice.NewDeleteDeviceRequest("test-5820-03")
 	ins, err := serviceImpl.DeleteDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -90,7 +91,7 @@ func TestLoadPasswordFromYAML(t *testing.T) {
 
 func TestChangeDeviceConfig(t *testing.T) {
 	req := rcdevice.NewChangeDeviceConfigRequest("")
-	req.DeviceName = "HYC-6890-01"
+	req.DeviceName = "test-5820-01"
 	req.DeviceConfigFile = "h3c-config.txt"
 	req.UserFile = "user.yml"
 	ins, err := serviceImpl.ChangeDeviceConfig(ctx, req)

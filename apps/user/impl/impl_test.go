@@ -27,7 +27,7 @@ func init() {
 func TestCreateVisitorUser(t *testing.T) {
 	req := user.NewCreateUserRuquest()
 	req.Username = "visitor2"
-	req.Password = "123456"
+	req.Password = "654321"
 	req.Role = user.ROLE_VISITOR
 	ins, err := serviceImpl.CreateUser(ctx, req)
 	if err != nil {
@@ -38,9 +38,9 @@ func TestCreateVisitorUser(t *testing.T) {
 
 func TestCreateAuthorUser(t *testing.T) {
 	req := user.NewCreateUserRuquest()
-	req.Username = "Visitor3"
+	req.Username = "admin3"
 	req.Password = "123456"
-	req.Role = user.ROLE_VISITOR
+	req.Role = user.ROLE_ADMIN
 	ins, err := serviceImpl.CreateUser(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -83,9 +83,9 @@ func TestUserCheckPassword(t *testing.T) {
 }
 
 func TestPasswordHash(t *testing.T) {
-	password := "123456"
+	password := "43211"
 	//hash, _ := HashPassword(password)
-	hash := "$2a$10$QLIaQAX2iTx/RJe/sMRwZ.ZwTZR7HjZYrYHeIxJ.BIxoJpPxFB2Sa"
+	hash := "$2a$10$PsQ34JA8sNGKlUfKTYa6w.mIlT7cTC36xBHj861x.7D6ckPZiWy9i"
 	fmt.Println("Password", password)
 	fmt.Println("Hash:	", hash)
 	match := CheckPasswordHash(password, hash)
@@ -96,7 +96,7 @@ func TestPasswordHash(t *testing.T) {
 func TestDeleteUser(t *testing.T) {
 	req := user.NewDeleteUserRequest()
 	//req.AccessToken = "crntt9114ufmu00pggs0"
-	req.Username = "Admin1"
+	req.Username = "admin3"
 	ins, err := serviceImpl.DeleteUser(ctx, req)
 	if err != nil {
 		log.Fatal(err)
@@ -107,7 +107,7 @@ func TestDeleteUser(t *testing.T) {
 func TestChangeUser(t *testing.T) {
 	req := user.NewChangeUserRequest()
 	//req.AccessToken = "crntt9114ufmu00pggs0"
-	req.Username = "Visitor3"
+	req.Username = "admin3"
 	req.Password = "43211"
 	ins, err := serviceImpl.ChangeUser(ctx, req)
 	if err != nil {
