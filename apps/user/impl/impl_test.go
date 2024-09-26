@@ -75,7 +75,7 @@ func CheckPasswordHash(password, hash string) bool {
 
 func TestUserCheckPassword(t *testing.T) {
 	req := user.NewCreateUserRuquest()
-	req.Username = "admin"
+	req.Username = "admin2"
 	req.Password = "123456"
 	u := user.NewUser(req)
 	u.HashPassword()
@@ -83,9 +83,9 @@ func TestUserCheckPassword(t *testing.T) {
 }
 
 func TestPasswordHash(t *testing.T) {
-	password := "43211"
+	password := "123456"
 	//hash, _ := HashPassword(password)
-	hash := "$2a$10$PsQ34JA8sNGKlUfKTYa6w.mIlT7cTC36xBHj861x.7D6ckPZiWy9i"
+	hash := "$2a$10$zAa2OTjxFBWVVxD/5U4CSObtGehyBk3skfHKsw8qx6vCzLum5KpEm"
 	fmt.Println("Password", password)
 	fmt.Println("Hash:	", hash)
 	match := CheckPasswordHash(password, hash)
