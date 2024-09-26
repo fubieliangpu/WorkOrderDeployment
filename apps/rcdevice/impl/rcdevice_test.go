@@ -91,7 +91,7 @@ func TestLoadPasswordFromYAML(t *testing.T) {
 
 func TestChangeDeviceConfig(t *testing.T) {
 	req := rcdevice.NewChangeDeviceConfigRequest("")
-	req.DeviceName = "test-5820-01"
+	req.DeviceName = "HYC-6890-01"
 	req.DeviceConfigFile = "h3c-config.txt"
 	req.UserFile = "user.yml"
 	ins, err := serviceImpl.ChangeDeviceConfig(ctx, req)

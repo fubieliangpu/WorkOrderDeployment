@@ -1,0 +1,27 @@
+******************************************************************************
+* Copyright (c) 2004-2022 New H3C Technologies Co., Ltd. All rights reserved.*
+* Without the owner's prior written consent,                                 *
+* no decompiling or reverse-engineering shall be allowed.                    *
+******************************************************************************
+
+<H3C>system-view
+System View: return to User View with Ctrl+Z.
+[H3C]
+[H3C]int lo99
+[H3C-LoopBack99]
+[H3C-LoopBack99]ip add 10.10.10.10 32
+[H3C-LoopBack99]
+[H3C-LoopBack99]dis ip int brief
+*down: administratively down
+(s): spoofing  (l): loopback
+Interface          Physical Protocol IP address/Mask    VPN instance Description
+Loop8              up       up(s)    --                 --           --         
+Loop9              up       up(s)    --                 --           --         
+Loop99             up       up(s)    10.10.10.10/32     --           --         
+Loop111            up       up(s)    10.121.112.112/32  --           --         
+MGE0/0/0           down     down     --                 --           --         
+Vlan1              up       up       192.168.101.220/24 --           --         
+[H3C-LoopBack99]
+[H3C-LoopBack99]return
+<H3C>
+<H3C>exit

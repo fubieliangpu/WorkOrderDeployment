@@ -91,6 +91,7 @@ type ChangeDeviceConfigRequest struct {
 	DeviceName       string `json:"device_name" validate:"required"`
 	DeviceConfigFile string `json:"device_config_file" validate:"required"`
 	UserFile         string `json:"user_file" validate:"required"`
+	DeploymentRecord string `json:"deployment_record" validate:"required"`
 }
 
 func (req *ChangeDeviceConfigRequest) Validate() error {
@@ -112,6 +113,7 @@ type ConfigInfo struct {
 	Port       string
 	Protocol   string
 	Configfile string
+	Recordfile string
 }
 
 func NewConfigInfo() *ConfigInfo {
@@ -168,8 +170,14 @@ func SshConfigTool(cfi *ConfigInfo) {
 
 	fdd, _ := os.Open(cfi.Configfile)
 	defer fdd.Close()
-	//这里输入输出后面改成文件
-	session.Stdout = os.Stdout
+	//每一次操作都留记录，输出到文件中
+	fresult, err := os.OpenFile(cfi.Recordfile, os.O_CREATE|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fresult.Close()
+
+	session.Stdout = fresult
 	session.Stdin = fdd
 	session.Stderr = os.Stderr
 	if err := session.Shell(); err != nil {

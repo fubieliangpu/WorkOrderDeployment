@@ -2,7 +2,7 @@ app:
     host: 127.0.0.1
     port: 8080
 mysql:
-    host: 192.168.230.21
+    host: 192.168.79.54
     port: 3306
     database: mydevice
     username: "root"

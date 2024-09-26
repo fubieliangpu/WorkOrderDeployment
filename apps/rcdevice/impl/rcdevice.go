@@ -124,7 +124,7 @@ func (i *DeviceServiceImpl) ChangeDeviceConfig(ctx context.Context, in *rcdevice
 
 	//将查询到的IP和端口信息用于SSH配置下发
 	ncfi := rcdevice.NewConfigInfo()
-	ncfi.Ip, ncfi.Port, ncfi.Configfile = ins.ServerAddr, ins.Port, in.DeviceConfigFile
+	ncfi.Ip, ncfi.Port, ncfi.Configfile, ncfi.Recordfile = ins.ServerAddr, ins.Port, in.DeviceConfigFile, in.DeploymentRecord
 	//如果加载设备登录用户名密码错误，则抛出自定义错误
 	nufi := rcdevice.NewDeviceUserInfo()
 	ncfi.UserInfo, err = rcdevice.LoadUsernmPasswdFromYaml(in.UserFile, nufi)
