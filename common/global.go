@@ -39,3 +39,11 @@ type UserMeta struct {
 	//更新时间，时间戳 10位，秒
 	UpdatedAt int64 `json:"updated_at" gorm:"column:updated_at"`
 }
+
+type DeviceLevel int
+
+const (
+	CORE DeviceLevel = iota + 1
+	CONVERGE
+	Access
+)

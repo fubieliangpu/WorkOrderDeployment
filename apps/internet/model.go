@@ -28,7 +28,7 @@ type DeploymentNetworkProductRequest struct {
 	//与客户对接的方式
 	ConnectMethod ConMethod `json:"con_meth" validate:"required"`
 	//客户与哪一层设备对接
-	AccessDeviceLevel DeviceLevel `json:"dev_level" validate:"required"`
+	AccessDeviceLevel common.DeviceLevel `json:"dev_level" validate:"required"`
 	//客户在哪个机房接入
 	Idc string `json:"idc" validate:"required"`
 	//客户接入的网络产品是哪个运营商的

@@ -10,14 +10,6 @@ const (
 	STATIC_LOADBALANCE
 )
 
-type DeviceLevel int
-
-const (
-	CORE DeviceLevel = iota + 1
-	CONVERGE
-	ACCESS
-)
-
 type DeploymentResult int
 
 const (

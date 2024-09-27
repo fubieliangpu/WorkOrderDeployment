@@ -34,7 +34,7 @@ func TestDescribeDevice(t *testing.T) {
 
 func TestQueryDeviceList(t *testing.T) {
 	req := rcdevice.NewQueryDeviceListRequest()
-	req.PageSize = 4
+	req.PageSize = 10
 	req.PageNumber = 1
 	ins, err := serviceImpl.QueryDeviceList(ctx, req)
 	if err != nil {

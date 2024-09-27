@@ -44,12 +44,6 @@ func (i *DeviceServiceImpl) QueryDeviceList(ctx context.Context, in *rcdevice.Qu
 	set := rcdevice.NewDeviceSet()
 	//查找数据库，构造查询条件
 	query := i.db.WithContext(ctx).Table("devices")
-	if in.KeyWords != "" {
-		query = query.Where("idc LIKE ?", "%"+in.KeyWords+"%")
-	}
-	if in.Status != nil {
-		query = query.Where("status = ?", *in.Status)
-	}
 
 	//Count,查询总数统计
 	err := query.Count(&set.Total).Error
@@ -58,6 +52,15 @@ func (i *DeviceServiceImpl) QueryDeviceList(ctx context.Context, in *rcdevice.Qu
 	}
 
 	//查询
+	if in.IDC != "" && in.DeviceLevel == nil && in.Status == nil {
+		query = query.Where("idc LIKE ?", "%"+in.IDC+"%")
+	}
+	if in.IDC != "" && in.DeviceLevel != nil && in.Status == nil {
+		query = query.Where("idc LIKE ? and device_level = ?", "%"+in.IDC+"%", *in.DeviceLevel)
+	}
+	if in.Status != nil {
+		query = query.Where("status = ?", *in.Status)
+	}
 	err = query.Order("change_at DESC").Limit(in.PageSize).Offset(in.Offset()).Find(&set.Items).Error
 	if err != nil {
 		return nil, err

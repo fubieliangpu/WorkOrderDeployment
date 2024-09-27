@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/token"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/user"
@@ -30,9 +32,13 @@ func (h *RcDeviceApiHandler) Registry(appRouter gin.IRouter) {
 func (h *RcDeviceApiHandler) QueryDeviceList(ctx *gin.Context) {
 	//获取用户请求
 	req := rcdevice.NewQueryDeviceListRequest()
+	if err := ctx.BindJSON(req); err != nil {
+		response.Failed(exception.ErrValidateFailed(err.Error()), ctx)
+		return
+	}
 	req.PageRequest = common.NewPageRequestFromGinCtx(ctx)
-	req.KeyWords = ctx.Query("keywords")
-
+	//req.IDC = ctx.Query("idc")
+	fmt.Println(req)
 	//业务处理
 	set, err := h.svc.QueryDeviceList(ctx.Request.Context(), req)
 	if err != nil {

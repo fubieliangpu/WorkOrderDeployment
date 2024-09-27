@@ -29,7 +29,7 @@ func TestNewDeviceSet(t *testing.T) {
 }
 
 func TestCreateDeviceRequest(t *testing.T) {
-	req := rcdevice.NewCreateDeviceRequest().SetDevice("test1", "192.168.79.1", "22", "hyc", 2)
+	req := rcdevice.NewCreateDeviceRequest().SetDevice("test1", "192.168.79.1", "22", "hyc", 2, 1)
 	validateres := req.Validate()
 	t.Log(req)
 	t.Log(validateres)

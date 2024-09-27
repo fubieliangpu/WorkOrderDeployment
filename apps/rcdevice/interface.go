@@ -35,8 +35,9 @@ type Service interface {
 
 type QueryDeviceListRequest struct {
 	*common.PageRequest
-	KeyWords string `json:"keywords"`
-	Status   *Status
+	IDC         string              `json:"idc"`
+	DeviceLevel *common.DeviceLevel `json:"device_level"`
+	Status      *Status             `json:"status"`
 }
 
 func (c *QueryDeviceListRequest) SetStatus(v Status) {
