@@ -38,3 +38,11 @@ func ErrParseFileFailed(format string, a ...any) *ApiException {
 		Message: fmt.Sprintf(format, a...),
 	}
 }
+
+//正则匹配失败
+func ErrRegularMatchFailed(format string, a ...any) *ApiException {
+	return &ApiException{
+		Code:    50444,
+		Message: fmt.Sprintf(format, a...),
+	}
+}

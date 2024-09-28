@@ -1,6 +1,8 @@
 package internet
 
-import "context"
+import (
+	"context"
+)
 
 const (
 	AppName = "internet"
