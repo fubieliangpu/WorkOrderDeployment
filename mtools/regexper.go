@@ -11,7 +11,7 @@ import (
 )
 
 // 定义一个冲突检测正则匹配工具
-func Regexper(recordfile string, regset ...string) (bool, error) {
+func Regexper(recordfile string, regset ...string) error {
 	//自定义匹配结果日志，如果匹配到则记录日志
 	zerolog.TimeFieldFormat = "2006/01/02 15:04:05 -0700"
 	flog, err := os.OpenFile("regexp.log", os.O_CREATE|os.O_APPEND, os.ModePerm)
@@ -51,8 +51,8 @@ func Regexper(recordfile string, regset ...string) (bool, error) {
 		}
 	}
 	if regsetsuccesscount == len(regset) {
-		return true, nil
+		return nil
 	}
 	//nil后期替换为自定义错误类型
-	return false, exception.ErrRegularMatchFailed("Regular expression matching failed, there may be conflicts!")
+	return exception.ErrRegularMatchFailed("Regular expression matching failed, there may be conflicts!")
 }
