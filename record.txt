@@ -4,21 +4,16 @@
 * no decompiling or reverse-engineering shall be allowed.                    *
 ******************************************************************************
 
-<H3C>system-view
-System View: return to User View with Ctrl+Z.
-[H3C]
-[H3C]int lo111
-[H3C-LoopBack111]
-[H3C-LoopBack111]ip add 10.121.112.112 32
-[H3C-LoopBack111]
-[H3C-LoopBack111]dis ip int brief
-*down: administratively down
-(s): spoofing  (l): loopback
-Interface          Physical Protocol IP address/Mask    VPN instance Description
-Loop111            up       up(s)    10.121.112.112/32  --           --         
-MGE0/0/0           down     down     --                 --           --         
-Vlan1              up       up       10.172.0.123/24    --           --         
-[H3C-LoopBack111]
-[H3C-LoopBack111]return
+<H3C>ping 223.5.5.5
+Ping 223.5.5.5 (223.5.5.5): 56 data bytes, press CTRL+C to break
+56 bytes from 223.5.5.5: icmp_seq=0 ttl=112 time=9.000 ms
+56 bytes from 223.5.5.5: icmp_seq=1 ttl=112 time=10.000 ms
+56 bytes from 223.5.5.5: icmp_seq=2 ttl=112 time=11.000 ms
+56 bytes from 223.5.5.5: icmp_seq=3 ttl=112 time=10.000 ms
+56 bytes from 223.5.5.5: icmp_seq=4 ttl=112 time=11.000 ms
+
+--- Ping statistics for 223.5.5.5 ---
+5 packet(s) transmitted, 5 packet(s) received, 0.0% packet loss
+round-trip min/avg/max/std-dev = 9.000/10.200/11.000/0.748 ms
 <H3C>
 <H3C>exit

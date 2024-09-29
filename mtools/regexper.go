@@ -35,8 +35,9 @@ func Regexper(recordfile string, regset ...string) (bool, error) {
 	}
 
 	//记录正则匹配到的次数，如果所有正则没有匹配，则数量一定小于表达式的数量，则返回失败结果
-	successcount := 0
+	regsetsuccesscount := 0
 	for _, singlereg := range regset {
+		successcount := 0
 		re := regexp.MustCompile(singlereg)
 		for _, v := range re.FindAll(recordcontent, -1) {
 			if len(v) > 0 {
@@ -45,9 +46,11 @@ func Regexper(recordfile string, regset ...string) (bool, error) {
 				successcount++
 			}
 		}
+		if successcount > 0 {
+			regsetsuccesscount++
+		}
 	}
-	if successcount == len(regset) {
-
+	if regsetsuccesscount == len(regset) {
 		return true, nil
 	}
 	//nil后期替换为自定义错误类型

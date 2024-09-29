@@ -46,3 +46,11 @@ func ErrRegularMatchFailed(format string, a ...any) *ApiException {
 		Message: fmt.Sprintf(format, a...),
 	}
 }
+
+//ping测失败
+func ErrPingLoss(format string, a ...any) *ApiException {
+	return &ApiException{
+		Code:    50404,
+		Message: fmt.Sprintf(format, a...),
+	}
+}

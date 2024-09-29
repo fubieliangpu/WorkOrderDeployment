@@ -1,6 +1,2 @@
-system-view
-int lo99
-ip add 10.10.10.10 32
-dis ip int brief
-return
+ping 223.5.5.5
 exit
