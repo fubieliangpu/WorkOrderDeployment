@@ -35,8 +35,12 @@ type DeploymentNetworkProductRequest struct {
 	Operators string `json:"operators" validate:"required"`
 	//为客户分配的业务IP
 	IpAddr string `json:"ip_addr" validate:"required"`
+	//业务IP的掩码
+	IpMask string `json:"ip_mask" validate:"required"`
 	//与客户的互联IP段
 	NeighborIp string `json:"neighbor_ip" validate:"required"`
+	//与客户的互联IP段掩码
+	NeighborMask string `json:"neighbor_maks" validate:"required"`
 }
 
 func NewDeploymentNetworkProductRequest() *DeploymentNetworkProductRequest {
