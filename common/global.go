@@ -45,5 +45,5 @@ type DeviceLevel int
 const (
 	CORE DeviceLevel = iota + 1
 	CONVERGE
-	Access
+	ACCESS
 )

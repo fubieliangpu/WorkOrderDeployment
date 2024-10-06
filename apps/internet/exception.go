@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrNoDeviceInIdc   = exception.NewApiException(50048, "指定IDC查询不到设备").WithHttpCode(http.StatusNotFound)
-	ErrRouteConflict   = exception.NewApiException(50050, "所下发路由冲突").WithHttpCode(http.StatusConflict)
-	ErrBrandNotSupport = exception.NewApiException(50055, "不支持该品牌设备").WithHttpCode(http.StatusNotAcceptable)
+	ErrNoDeviceInIdc       = exception.NewApiException(50048, "指定IDC查询不到设备").WithHttpCode(http.StatusNotFound)
+	ErrRouteConflict       = exception.NewApiException(50050, "所下发路由冲突").WithHttpCode(http.StatusConflict)
+	ErrBrandNotSupport     = exception.NewApiException(50055, "不支持该品牌设备").WithHttpCode(http.StatusNotAcceptable)
+	ErrAccessLevelNotFound = exception.NewApiException(50414, "所请求的接入设备层级不存在").WithHttpCode(http.StatusNotFound)
 )

@@ -54,3 +54,11 @@ func ErrPingLoss(format string, a ...any) *ApiException {
 		Message: fmt.Sprintf(format, a...),
 	}
 }
+
+//接入类型不支持
+func ErrDeviceAccessMothed(format string, a ...any) *ApiException {
+	return &ApiException{
+		Code:    50424,
+		Message: fmt.Sprintf(format, a...),
+	}
+}
