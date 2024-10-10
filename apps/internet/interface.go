@@ -38,7 +38,7 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 			cfi.Ip = device.ServerAddr
 			cfi.Port = device.Port
 			cfi.Configfile = "H3CHWDisCommand.txt"
-			cfi.Recordfile = "H3CHWCoreVRRPVpn.txt"
+			cfi.Recordfile = "H3CHWCoreVpn.txt"
 			//首先查看是否存在对应运营商的VPN-INSTANCE，如果存在则查路由表时需要带上对应参数
 			mtools.CommandGenerator(cfi.Configfile, "display ip vpn-instance\nexit\n")
 			rcdevice.SshConfigTool(cfi)

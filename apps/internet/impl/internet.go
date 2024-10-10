@@ -5,7 +5,6 @@ import (
 
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/internet"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
-	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 )
 
@@ -100,14 +99,12 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 	if deviceset.Total == 0 {
 		return nil, internet.ErrNoDeviceInIdc
 	}
-	switch in.ConnectMethod {
-	//静态负载
-	case internet.SHAREGATEWAY:
-		if deviceset.Items[0].Brand == common.H3C {
+	//由于先前已经判断过冲突问题，此处其他判断如分配哪个端口，是否配置携带vpn-instance由用户脚本中体现，同时会存在临时变化，程序不做判断，
+	//安全起见,配置前需要人工审核脚本,脚本名称固定为configdeploymentA.txt
+	configreq := rcdevice.NewChangeDeviceConfigRequest(deviceset.Items[0].Name)
+	configreq.UserFile = "user.yaml"
 
-		}
-
-	}
+	i.ctldevice.ChangeDeviceConfig(ctx, configreq)
 
 	return nil, nil
 }
