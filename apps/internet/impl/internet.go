@@ -5,6 +5,7 @@ import (
 
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/internet"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
+	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 )
 
@@ -100,8 +101,11 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 		return nil, internet.ErrNoDeviceInIdc
 	}
 	switch in.ConnectMethod {
-	//共享网关的配置下发
+	//静态负载
 	case internet.SHAREGATEWAY:
+		if deviceset.Items[0].Brand == common.H3C {
+
+		}
 
 	}
 
