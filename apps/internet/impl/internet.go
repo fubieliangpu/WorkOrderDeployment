@@ -85,6 +85,26 @@ func (i *NetProdDeplImpl) ConflictCheck(ctx context.Context, in *internet.Deploy
 
 // 业务配置下发
 func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.DeploymentNetworkProductRequest) (*internet.NetProd, error) {
+	//校验
+	if err := in.Validate(); err != nil {
+		return nil, exception.ErrValidateFailed(err.Error())
+	}
+	req := rcdevice.NewQueryDeviceListRequest()
+	req.IDC = in.Idc
+	req.DeviceLevel = &in.AccessDeviceLevel
+	deviceset, err := i.ctldevice.QueryDeviceList(ctx, req)
+	if err != nil {
+		return nil, exception.ErrServerInternal(err.Error())
+	}
+	if deviceset.Total == 0 {
+		return nil, internet.ErrNoDeviceInIdc
+	}
+	switch in.ConnectMethod {
+	//共享网关的配置下发
+	case internet.SHAREGATEWAY:
+
+	}
+
 	return nil, nil
 }
 
