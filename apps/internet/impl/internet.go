@@ -100,12 +100,23 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 		return nil, internet.ErrNoDeviceInIdc
 	}
 	//由于先前已经判断过冲突问题，此处其他判断如分配哪个端口，是否配置携带vpn-instance由用户脚本中体现，同时会存在临时变化，程序不做判断，
-	//安全起见,配置前需要人工审核脚本,脚本名称固定为configdeploymentA.txt
+	//安全起见,配置前需要人工审核脚本,脚本名称固定为configdeploymentA.txt configdeploymentA.txt,对应主备设备，如果没有备设备则只有configdeploymentA.txt
 	configreq := rcdevice.NewChangeDeviceConfigRequest(deviceset.Items[0].Name)
 	configreq.UserFile = "user.yaml"
+	configreq.DeploymentRecord = "configrecord.txt"
 
-	i.ctldevice.ChangeDeviceConfig(ctx, configreq)
-
+	switch in.ConnectMethod {
+	case internet.STATIC_LOADBALANCE:
+		configreq.DeviceConfigFile = "configdeploymentA.txt"
+		if _, err := i.ctldevice.ChangeDeviceConfig(ctx, configreq); err != nil {
+			return nil, err
+		}
+		configreq.DeviceConfigFile = "configdeploymentB.txt"
+		configreq.DeviceName = deviceset.Items[1].Name
+		if _, err := i.ctldevice.ChangeDeviceConfig(ctx, configreq); err != nil {
+			return nil, err
+		}
+	}
 	return nil, nil
 }
 
