@@ -1,0 +1,16 @@
+{"level":"info","time":"2024/10/12 17:55:19 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/12 17:55:19 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/12 17:55:42 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/12 17:55:42 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/12 18:02:10 +0800","message":"Match content 'ip route-static 120.133.133.0 27 192.168.101.1\r\r' by expression 'ip route-static.*120.133.133.0 27.*'"}
+{"level":"info","time":"2024/10/12 18:09:01 +0800","message":"Match content 'ip route-static 120.133.133.0 27 192.168.101.1\r\r' by expression 'ip route-static.*120.133.133.0 27.*'"}
+{"level":"info","time":"2024/10/12 21:11:56 +0800","message":"Match content 'ip route-static 120.133.133.0 27 192.168.1.1\r\r' by expression 'ip route-static.*120.133.133.0 27.*'"}
+{"level":"info","time":"2024/10/12 22:00:51 +0800","message":"Match content '120.133.133.0 27\r\r' by expression '120.133.133.0.*'"}
+{"level":"info","time":"2024/10/12 22:03:16 +0800","message":"Match content '172.18.1.0/30' by expression '172.18.1.0/30'"}
+{"level":"info","time":"2024/10/12 22:11:46 +0800","message":"Match content '172.18.1.0/30' by expression '172.18.1.0/30'"}
+{"level":"info","time":"2024/10/12 22:13:32 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/12 22:13:32 +0800","message":"Match content '120.133.133.0/27' by expression '120.133.133.0/27'"}
+{"level":"info","time":"2024/10/12 22:25:53 +0800","message":"Match content '172.18.1.0/30' by expression '172.18.1.0/30'"}
+{"level":"info","time":"2024/10/12 22:28:36 +0800","message":"Match content '172.18.1.0/30' by expression '172.18.1.0/30'"}
+{"level":"info","time":"2024/10/12 22:29:13 +0800","message":"Match content '172.18.1.0/30' by expression '172.18.1.0/30'"}
+{"level":"info","time":"2024/10/12 22:30:28 +0800","message":"Match content ', 0.0% packet loss' by expression ', 0\\.0% packet loss'"}

@@ -42,7 +42,7 @@ type DeploymentNetworkProductRequest struct {
 	//与客户的互联IP段掩码
 	NeighborMask string `json:"neighbor_maks" validate:"required"`
 	//是否为撤销配置
-	ConfigRevoke bool `json:"config_revoke" validate:"required"`
+	ConfigRevoke int `json:"config_revoke"`
 }
 
 func NewDeploymentNetworkProductRequest() *DeploymentNetworkProductRequest {

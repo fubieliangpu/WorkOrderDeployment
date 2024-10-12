@@ -58,13 +58,13 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 				cfi.Recordfile = "H3CHWVPNRoutingtable.txt"
 				rcdevice.SshConfigTool(cfi)
 				//只要匹配到了要下发的地址，则存在冲突，不再继续判断,采用or的匹配模式，即只要有一则正则匹配到就算匹配成功，返回nil
-				err = mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("^%v", d.IpAddr), fmt.Sprintf("^%v", d.NeighborIp))
+				err = mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("%v/%v", d.IpAddr, d.IpMask), fmt.Sprintf("%v/%v", d.NeighborIp, d.NeighborMask))
 				if err == nil {
 					return ErrRouteConflict
 				}
 			}
 			//不存在对应运营商的VPN-INSTANCE是如何判断路由表
-			if err == exception.ErrRegularMatchFailed("Regular expression matching failed!") {
+			if err.(*exception.ApiException).Code == 50444 {
 				command := fmt.Sprintf(
 					"display ip routing-table %v %v\ndisplay ip routing-table %v %v\nexit\n",
 					d.IpAddr,
@@ -76,7 +76,7 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 				cfi.Recordfile = "H3CHWRoutingtable.txt"
 				rcdevice.SshConfigTool(cfi)
 				//只要匹配到了要下发的地址，则存在冲突，不再继续判断,采用or的匹配模式，即只要有一则正则匹配到就算匹配成功，返回nil
-				err = mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("^%v", d.IpAddr), fmt.Sprintf("^%v", d.NeighborIp))
+				err = mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("%v/%v", d.IpAddr, d.IpMask), fmt.Sprintf("%v/%v", d.NeighborIp, d.NeighborMask))
 				if err == nil {
 					return ErrRouteConflict
 				}
@@ -120,7 +120,7 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 			cfi.Recordfile = "H3CHWRoutingtable.txt"
 			rcdevice.SshConfigTool(cfi)
 			//只要匹配到了要下发的地址，则存在冲突，不再继续判断,采用or的匹配模式，即只要有一则正则匹配到就算匹配成功，返回nil
-			err := mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("^%v", d.IpAddr), fmt.Sprintf("^%v", d.NeighborIp))
+			err := mtools.Regexper(cfi.Recordfile, 0, fmt.Sprintf("%v/%v", d.IpAddr, d.IpMask), fmt.Sprintf("%v/%v", d.NeighborIp, d.NeighborMask))
 			if err == nil {
 				return ErrRouteConflict
 			}

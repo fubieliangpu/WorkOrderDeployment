@@ -23,7 +23,7 @@ func (i *NetProdDeplImpl) ConflictCheck(ctx context.Context, in *internet.Deploy
 	if err != nil {
 		return internet.CONFLICT, exception.ErrServerInternal(err.Error())
 	}
-	if deviceset.Total == 0 {
+	if len(deviceset.Items) == 0 {
 		return internet.CONFLICT, internet.ErrNoDeviceInIdc
 	}
 	//当请求部署的位置在核心层，需要在对应的vpn-Instance下检查路由条目及在其下ping测，作为第一阶段检验

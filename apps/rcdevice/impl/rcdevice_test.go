@@ -10,11 +10,12 @@ import (
 
 func TestCreateDevice(t *testing.T) {
 	req := rcdevice.NewCreateDeviceRequest()
-	req.Name = "test-5820-01"
-	req.ServerAddr = "10.172.0.123"
+	req.Name = "HYC-6890-02"
+	req.ServerAddr = "192.168.101.220"
 	req.Port = "22"
-	req.Brand = 2
-	req.Idc = "RJJD"
+	req.Brand = 3
+	req.Idc = "HYC"
+	req.DeviceLevel = common.CORE
 	ins, err := serviceImpl.CreateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -45,10 +46,9 @@ func TestQueryDeviceList(t *testing.T) {
 }
 
 func TestPatchUpdateDevice(t *testing.T) {
-	req := rcdevice.NewUpdateDeviceRequest("test-5820-02")
+	req := rcdevice.NewUpdateDeviceRequest("HYC-6890-02")
 	req.UpdateMode = common.UPDATE_MODE_PATCH
-	req.Brand = 1
-	req.Name = "test-5820-03"
+	req.DeviceLevel = common.CONVERGE
 	ins, err := serviceImpl.UpdateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
