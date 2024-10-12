@@ -17,10 +17,8 @@ const (
 type Service interface {
 	//冲突检测
 	ConflictCheck(context.Context, *DeploymentNetworkProductRequest) (ConfigConflictStatus, error)
-	//业务配置下发
+	//业务配置下发与业务配置回收
 	ConfigDeployment(context.Context, *DeploymentNetworkProductRequest) (*NetProd, error)
-	//业务配置回收
-	ConfigRevoke(context.Context, *UndoDeviceConfigRequest) (*NetProd, error)
 }
 
 // 检查基础冲突，不同接入层下的指定品牌设备的路由表检查，汇聚、接入层设备ping测检查

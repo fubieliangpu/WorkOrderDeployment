@@ -83,9 +83,9 @@ func (i *NetProdDeplImpl) ConflictCheck(ctx context.Context, in *internet.Deploy
 
 }
 
-// 业务配置下发
+// 业务配置下发与业务配置回收
 func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.DeploymentNetworkProductRequest) (*internet.NetProd, error) {
-	//校验
+	//校验与查询设备
 	if err := in.Validate(); err != nil {
 		return nil, exception.ErrValidateFailed(err.Error())
 	}
@@ -104,23 +104,30 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 	configreq := rcdevice.NewChangeDeviceConfigRequest(deviceset.Items[0].Name)
 	configreq.UserFile = "user.yaml"
 	configreq.DeploymentRecord = "configrecord.txt"
-
-	switch in.ConnectMethod {
-	case internet.STATIC_LOADBALANCE:
+	res := internet.NewNetProd()
+	res.DeploymentNetworkProductRequest = in
+	if in.ConnectMethod == internet.STATIC_LOADBALANCE || in.ConnectMethod == internet.STATIC_MASTER_BACKUP || in.ConnectMethod == internet.VRRP {
 		configreq.DeviceConfigFile = "configdeploymentA.txt"
 		if _, err := i.ctldevice.ChangeDeviceConfig(ctx, configreq); err != nil {
-			return nil, err
+			res.Status = internet.FAIL
+			return res, err
 		}
 		configreq.DeviceConfigFile = "configdeploymentB.txt"
 		configreq.DeviceName = deviceset.Items[1].Name
 		if _, err := i.ctldevice.ChangeDeviceConfig(ctx, configreq); err != nil {
-			return nil, err
+			res.Status = internet.FAIL
+			return res, err
 		}
+	} else if in.ConnectMethod == internet.SHAREGATEWAY || in.ConnectMethod == internet.SINGLE {
+		configreq.DeviceConfigFile = "configdeploymentA.txt"
+		if _, err := i.ctldevice.ChangeDeviceConfig(ctx, configreq); err != nil {
+			res.Status = internet.FAIL
+			return res, err
+		}
+	} else {
+		res.Status = internet.FAIL
+		return res, exception.ErrDeviceAccessMothed("The ConnectMethod is not supported")
 	}
-	return nil, nil
-}
-
-// 业务配置回收
-func (i *NetProdDeplImpl) ConfigRevoke(ctx context.Context, in *internet.UndoDeviceConfigRequest) (*internet.NetProd, error) {
-	return nil, nil
+	res.Status = internet.SUCCESS
+	return res, nil
 }
