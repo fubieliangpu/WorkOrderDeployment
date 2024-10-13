@@ -96,7 +96,7 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 	if err != nil {
 		return nil, exception.ErrServerInternal(err.Error())
 	}
-	if deviceset.Total == 0 {
+	if len(deviceset.Items) == 0 {
 		return nil, internet.ErrNoDeviceInIdc
 	}
 	//由于先前已经判断过冲突问题，此处其他判断如分配哪个端口，是否配置携带vpn-instance由用户脚本中体现，同时会存在临时变化，程序不做判断，

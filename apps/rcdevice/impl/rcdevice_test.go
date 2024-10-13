@@ -48,7 +48,7 @@ func TestQueryDeviceList(t *testing.T) {
 func TestPatchUpdateDevice(t *testing.T) {
 	req := rcdevice.NewUpdateDeviceRequest("HYC-6890-02")
 	req.UpdateMode = common.UPDATE_MODE_PATCH
-	req.DeviceLevel = common.CONVERGE
+	req.DeviceLevel = common.CORE
 	ins, err := serviceImpl.UpdateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)

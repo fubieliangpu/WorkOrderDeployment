@@ -24,11 +24,13 @@ type Service interface {
 // 检查基础冲突，不同接入层下的指定品牌设备的路由表检查，汇聚、接入层设备ping测检查
 // 目前只支持H3C及Huawei_CE设备品牌
 func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) error {
-
+	var err error
 	cfi := rcdevice.NewConfigInfo()
 	cfi.UserInfo = rcdevice.NewDeviceUserInfo()
-	cfi.UserInfo, _ = rcdevice.LoadUsernmPasswdFromYaml("user.yaml", cfi.UserInfo)
-
+	cfi.UserInfo, err = rcdevice.LoadUsernmPasswdFromYaml("user.yaml", cfi.UserInfo)
+	if err != nil {
+		return err
+	}
 	if d.AccessDeviceLevel == common.CORE {
 		//判断查找到的核心设备品牌
 
@@ -62,9 +64,8 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 				if err == nil {
 					return ErrRouteConflict
 				}
-			}
-			//不存在对应运营商的VPN-INSTANCE是如何判断路由表
-			if err.(*exception.ApiException).Code == 50444 {
+				//不存在对应运营商的VPN-INSTANCE是如何判断路由表
+			} else if err.(*exception.ApiException).Code == 50444 {
 				command := fmt.Sprintf(
 					"display ip routing-table %v %v\ndisplay ip routing-table %v %v\nexit\n",
 					d.IpAddr,

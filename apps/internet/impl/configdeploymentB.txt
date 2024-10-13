@@ -1,0 +1,8 @@
+system-view
+vlan 30
+int vlan 30
+ip binding vpn-instance LY-CT
+ip add 172.18.2.1 30
+ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface 30 172.18.2.2
+return
+exit
