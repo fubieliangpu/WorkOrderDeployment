@@ -7,12 +7,16 @@
 <H3C>system-view
 System View: return to User View with Ctrl+Z.
 [H3C]
-[H3C]vlan 30
-[H3C-vlan30]
-[H3C-vlan30]int vlan 30
-[H3C-Vlan-interface30]
-[H3C-Vlan-interface30]ip binding vpn-instance LY-CT
-Some configurations on the interface are removed.
+[H3C]undo vlan 30
+[H3C]
+[H3C]return
+<H3C>
+<H3C>exit
+[H3C]
+[H3C]return
+<H3C>
+<H3C>exit
+p binding vpn-instance LY-CT
 [H3C-Vlan-interface30]
 [H3C-Vlan-interface30]ip add 172.18.2.1 30
 [H3C-Vlan-interface30]
@@ -22,6 +26,11 @@ Some configurations on the interface are removed.
 <H3C>
 <H3C>exit
 7 Vlan-interface 20 172.18.1.2
+[H3C]
+[H3C]return
+<H3C>
+<H3C>exit
+.18.1.2
 [H3C]
 [H3C]return
 <H3C>

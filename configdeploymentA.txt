@@ -1,0 +1,5 @@
+system-view
+undo vlan 20
+undo ip vpn-instance LY-CT
+return
+exit

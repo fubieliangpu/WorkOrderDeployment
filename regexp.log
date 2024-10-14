@@ -1,0 +1,27 @@
+{"level":"info","time":"2024/10/14 14:41:32 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:41:32 +0800","message":"Match content 'ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface20 172.18.1.2\r\r' by expression 'ip route-static.*120.133.141.0 27.*'"}
+{"level":"info","time":"2024/10/14 14:42:12 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:42:13 +0800","message":"Match content 'ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface20 172.18.1.2\r\r' by expression 'ip route-static.*120.133.141.0 27.*'"}
+{"level":"info","time":"2024/10/14 14:44:15 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:44:16 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:46:54 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:46:54 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:48:16 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:48:17 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 14:58:04 +0800","message":"Match content ', 0.0% packet loss' by expression ', 0\\.0% packet loss'"}
+{"level":"info","time":"2024/10/14 14:58:36 +0800","message":"Match content 'ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface20 172.18.1.2\r\r' by expression 'ip route-static.*120.133.141.0 27.*'"}
+{"level":"info","time":"2024/10/14 15:18:10 +0800","message":"Match content 'ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface20 172.18.1.2\r\r' by expression 'ip route-static.*120.133.141.0 27.*'"}
+{"level":"info","time":"2024/10/14 15:18:10 +0800","message":"Match content 'ip route-static vpn-instance LY-CT 120.133.141.0 27 Vlan-interface30 172.18.2.2\r\r' by expression 'ip route-static.*120.133.141.0 27.*'"}
+{"level":"info","time":"2024/10/14 15:50:56 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 15:50:56 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/14 16:01:10 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:01:11 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/14 16:02:55 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:02:55 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/14 16:05:54 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:05:55 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/14 16:06:21 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/14 16:10:31 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:10:32 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:10:54 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
+{"level":"info","time":"2024/10/14 16:10:54 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}

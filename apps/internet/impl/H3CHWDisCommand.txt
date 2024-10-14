@@ -1,4 +1,0 @@
-display current-configuration | include 120.133.141.0
-exit
-g-table 172.18.1.0 30
-exit

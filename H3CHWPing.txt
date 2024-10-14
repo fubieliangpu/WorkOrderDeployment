@@ -1,0 +1,38 @@
+******************************************************************************
+* Copyright (c) 2004-2022 New H3C Technologies Co., Ltd. All rights reserved.*
+* Without the owner's prior written consent,                                 *
+* no decompiling or reverse-engineering shall be allowed.                    *
+******************************************************************************
+
+<H3C>ping 120.133.143.1
+Ping 120.133.143.1 (120.133.143.1): 56 data bytes, press CTRL+C to break
+Request time out
+Request time out
+Request time out
+Request time out
+Request time out
+
+--- Ping statistics for 120.133.143.1 ---
+5 packet(s) transmitted, 0 packet(s) received, 100.0% packet loss
+<H3C>ping 172.18.2.1
+Ping 172.18.2.1 (172.18.2.1): 56 data bytes, press CTRL+C to break
+Request time out
+Request time out
+Request time out
+Request time out
+Request time out
+
+--- Ping statistics for 172.18.2.1 ---
+5 packet(s) transmitted, 0 packet(s) received, 100.0% packet loss
+<H3C>exit
+.1
+Ping 172.18.1.1 (172.18.1.1): 56 data bytes, press CTRL+C to break
+Request time out
+Request time out
+Request time out
+Request time out
+Request time out
+
+--- Ping statistics for 172.18.1.1 ---
+5 packet(s) transmitted, 0 packet(s) received, 100.0% packet loss
+<H3C>exit

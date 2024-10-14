@@ -1,0 +1,4 @@
+system-view
+undo vlan 30
+return
+exit

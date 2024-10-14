@@ -84,9 +84,13 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 			}
 
 			//然后检查配置,主要针对是否有之前遗留的静态路由
+			//有可能之前互联接口配置没有清空，但是路由表又查不到，这部分垃圾配置也需要找出来，如果有垃圾配置则存在冲突，需要人为去清理
+			gips := mtools.GetGatewayByIpStr(d.IpAddr, d.NeighborIp)
 			command := fmt.Sprintf(
-				"display current-configuration | include %v\nexit\n",
+				"display current-configuration | include %v\ndisplay current-configuration | include %v\ndisplay current-configuration | include %v\nexit\n",
 				d.IpAddr,
+				gips[0],
+				gips[1],
 			)
 			mtools.CommandGenerator(cfi.Configfile, command)
 			cfi.Recordfile = "H3CHWRouteConfig.txt"
@@ -95,6 +99,8 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 				cfi.Recordfile,
 				0,
 				fmt.Sprintf("ip route-static.*%v %v.*", d.IpAddr, d.IpMask),
+				fmt.Sprintf("ip address %v.*", gips[0]),
+				fmt.Sprintf("ip address %v.*", gips[1]),
 			)
 			//只要匹配到了，则存在冲突，不再继续判断
 			if err == nil {
@@ -127,9 +133,13 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 			}
 
 			//然后检查配置,主要针对是否有之前遗留的静态路由
+			//有可能之前互联接口配置没有清空，但是路由表又查不到，这部分垃圾配置也需要找出来，如果有垃圾配置则存在冲突，需要人为去清理
+			gips := mtools.GetGatewayByIpStr(d.IpAddr, d.NeighborIp)
 			command = fmt.Sprintf(
-				"display current-configuration | include %v\nexit\n",
+				"display current-configuration | include %v\ndisplay current-configuration | include %v\ndisplay current-configuration | include %v\nexit\n",
 				d.IpAddr,
+				gips[0],
+				gips[1],
 			)
 			mtools.CommandGenerator(cfi.Configfile, command)
 			cfi.Recordfile = "H3CHWRouteConfig.txt"
@@ -138,6 +148,8 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 				cfi.Recordfile,
 				0,
 				fmt.Sprintf("ip route-static.*%v %v.*", d.IpAddr, d.IpMask),
+				fmt.Sprintf("ip address %v.*", gips[0]),
+				fmt.Sprintf("ip address %v.*", gips[1]),
 			)
 			//只要匹配到了，则存在冲突，不再继续判断
 			if err == nil {
@@ -150,7 +162,6 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 			//2.私网地址互联，本身网关配置在我司交换机上，但是使用的时私网地址下一跳，那么客户侧公网地址未必可ping，需要额外测试ping一个互联地址，互联地址+1就是我司交换机端口地址
 			//因此需要测试两个地址，公网地址段最后一位+1、私网地址段最后一位+1
 			//分割业务IP，切片最后一个元素转为数字后+1再转回来，在组成字符串
-			gips := mtools.GetGatewayByIpStr(d.IpAddr, d.NeighborIp)
 			command = fmt.Sprintf(
 				"ping %v\nping %v\nexit\n",
 				gips[0],

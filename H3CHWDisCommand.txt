@@ -1,0 +1,4 @@
+display current-configuration | include 120.133.143.0
+display current-configuration | include 120.133.143.1
+display current-configuration | include 172.18.1.1
+exit

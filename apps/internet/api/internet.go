@@ -14,7 +14,7 @@ func (h *InternetApiHandler) Registry(appRouter gin.IRouter) {
 	appRouter.Use(middleware.Auth)
 	appRouter.GET("/conflictcheck", middleware.RequireRole(user.ROLE_ADMIN), h.ConflictCheck)
 	appRouter.PUT("/deploymentnetpd", middleware.RequireRole(user.ROLE_ADMIN), h.ConfigDeployment)
-
+	appRouter.DELETE("/revokedeployment", middleware.RequireRole(user.ROLE_ADMIN), h.RevokeDeployment)
 }
 
 // 部署业务前冲突检测 /wod/api/v1/internet/conflictcheck

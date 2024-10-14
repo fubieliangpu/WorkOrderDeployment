@@ -1,0 +1,9 @@
+******************************************************************************
+* Copyright (c) 2004-2022 New H3C Technologies Co., Ltd. All rights reserved.*
+* Without the owner's prior written consent,                                 *
+* no decompiling or reverse-engineering shall be allowed.                    *
+******************************************************************************
+
+<H3C>display ip routing-table 120.133.143.0 27
+<H3C>display ip routing-table 172.18.2.0 30
+<H3C>exit

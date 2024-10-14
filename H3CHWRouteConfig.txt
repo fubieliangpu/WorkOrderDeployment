@@ -4,5 +4,9 @@
 * no decompiling or reverse-engineering shall be allowed.                    *
 ******************************************************************************
 
-<H3C>display current-configuration | include 120.133.141.0
+<H3C>display current-configuration | include 120.133.143.0
+<H3C>display current-configuration | include 120.133.143.1
+<H3C>display current-configuration | include 172.18.1.1
+ ip address 172.18.1.1 255.255.255.252
 <H3C>exit
+xit
