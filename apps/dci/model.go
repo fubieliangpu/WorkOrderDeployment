@@ -38,8 +38,8 @@ type CreateDCIRequest struct {
 	PortNumber int `json:"port_number" validate:"required"`
 	//Tunnel目标的设备名，主要用来检查有没有已经存在的通道
 	DestDevName string `json:"dest_dev_name" validate:"required"`
-	//源设备名
-	DevName string `json:"dev_name" validate:"required"`
+	//源设备名,即本端设备名
+	SrcDevName string `json:"src_dev_name" validate:"required"`
 }
 
 func NewCreateDCIRequest() *CreateDCIRequest {
