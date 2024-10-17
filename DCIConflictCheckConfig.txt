@@ -1,0 +1,7 @@
+screen-length disable
+display vlan 2224
+display current-configuration | include 2224
+display l2vpn vsi name HYC-01-SZJY-01-01-SZCT-2224
+display interface Bridge-Aggregation 6
+display interface brief description | include Tun.*SZ-HYC-1L-1-051-V-S6800-01
+exit

@@ -25,3 +25,4 @@
 {"level":"info","time":"2024/10/14 16:10:32 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
 {"level":"info","time":"2024/10/14 16:10:54 +0800","message":"Match content 'LY-CT' by expression 'LY-CT'"}
 {"level":"info","time":"2024/10/14 16:10:54 +0800","message":"Match content 'ip address 172.18.1.1 255.255.255.252\r\r' by expression 'ip address 172.18.1.1.*'"}
+{"level":"info","time":"2024/10/17 17:58:34 +0800","message":"Match content 'VLAN ID: 1' by expression 'VLAN ID: \\d+'"}

@@ -1,0 +1,4 @@
+system-view
+undo vlan 2223
+return
+exit

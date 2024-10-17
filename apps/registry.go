@@ -1,6 +1,8 @@
 package apps
 
 import (
+	_ "github.com/fubieliangpu/WorkOrderDeployment/apps/dci/api"
+	_ "github.com/fubieliangpu/WorkOrderDeployment/apps/dci/impl"
 	_ "github.com/fubieliangpu/WorkOrderDeployment/apps/internet/api"
 	_ "github.com/fubieliangpu/WorkOrderDeployment/apps/internet/impl"
 	_ "github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice/api"

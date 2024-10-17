@@ -1,0 +1,16 @@
+******************************************************************************
+* Copyright (c) 2004-2022 New H3C Technologies Co., Ltd. All rights reserved.*
+* Without the owner's prior written consent,                                 *
+* no decompiling or reverse-engineering shall be allowed.                    *
+******************************************************************************
+
+<H3C>screen-length disable
+<H3C>display vlan 2224
+This VLAN does not exist.
+<H3C>display current-configuration | include 2224
+<H3C>display l2vpn vsi name HYC-01-SZJY-01-01-SZCT-2224
+<H3C>display interface Bridge-Aggregation 6
+                       ^
+ % Wrong parameter found at '^' position.
+<H3C>display interface brief description | include Tun.*SZ-HYC-1L-1-051-V-S6800-01
+<H3C>exit

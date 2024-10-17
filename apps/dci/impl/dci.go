@@ -67,7 +67,7 @@ func (i *DCIDeplImpl) ConfigDeployment(ctx context.Context, in *dci.CreateDCIReq
 		return nil, err
 	}
 
-	//返回dci.DCI类型方便后面扩展
+	//返回*dci.DCI类型方便后面扩展
 	ddci := dci.NewDCI()
 	ddci.CreateDCIRequest = in
 	return ddci, nil

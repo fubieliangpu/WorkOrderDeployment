@@ -10,8 +10,8 @@ import (
 
 func TestCreateDevice(t *testing.T) {
 	req := rcdevice.NewCreateDeviceRequest()
-	req.Name = "HYC-6890-02"
-	req.ServerAddr = "192.168.101.220"
+	req.Name = "SZ-HYC-1L-1-051-V-S6800-01"
+	req.ServerAddr = "10.172.0.123"
 	req.Port = "22"
 	req.Brand = 3
 	req.Idc = "HYC"

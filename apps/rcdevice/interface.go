@@ -172,7 +172,7 @@ func SshConfigTool(cfi *ConfigInfo) {
 	fdd, _ := os.Open(cfi.Configfile)
 	defer fdd.Close()
 	//每一次操作都留记录，输出到文件中
-	fresult, err := os.OpenFile(cfi.Recordfile, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	fresult, err := os.OpenFile(cfi.Recordfile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
