@@ -14,11 +14,21 @@ const (
 	AppName = "internet"
 )
 
+//	type Service interface {
+//		//冲突检测
+//		ConflictCheck(context.Context, *DeploymentNetworkProductRequest) (ConfigConflictStatus, error)
+//		//业务配置下发与业务配置回收
+//		ConfigDeployment(context.Context, *DeploymentNetworkProductRequest) (*NetProd, error)
+//	}
 type Service interface {
 	//冲突检测
-	ConflictCheck(context.Context, *DeploymentNetworkProductRequest) (ConfigConflictStatus, error)
-	//业务配置下发与业务配置回收
-	ConfigDeployment(context.Context, *DeploymentNetworkProductRequest) (*NetProd, error)
+	VrrpConflictCheck(context.Context, *DeploymentVRRP) (ConfigConflictStatus, error)
+	DoubleStaticConflictCheck(context.Context, *DeploymentDoubleStatic) (ConfigConflictStatus, error)
+	SingleConflictCheck(context.Context, *DeploymentSingle) (ConfigConflictStatus, error)
+	//配置下发与业务配置回收
+	VrrpDeployment(context.Context, *DeploymentVRRP) (DeploymentResult, error)
+	DoubleStaticDeployment(context.Context, *DeploymentDoubleStatic) (DeploymentResult, error)
+	SingleDeployment(context.Context, *DeploymentSingle) (DeploymentResult, error)
 }
 
 // 检查基础冲突，不同接入层下的指定品牌设备的路由表检查，汇聚、接入层设备ping测检查
@@ -188,3 +198,5 @@ func (d *DeploymentNetworkProductRequest) BasicCheck(device *rcdevice.Device) er
 	//未检测到基础路由冲突
 	return nil
 }
+
+//

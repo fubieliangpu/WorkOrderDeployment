@@ -131,3 +131,17 @@ func (i *NetProdDeplImpl) ConfigDeployment(ctx context.Context, in *internet.Dep
 	res.Status = internet.SUCCESS
 	return res, nil
 }
+
+func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.DeploymentVRRP) (internet.ConfigConflictStatus, error) {
+	if err := in.Validate(); err != nil {
+		return internet.CONFLICT, exception.ErrValidateFailed(err.Error())
+	}
+	//主设备查询
+	querydev := rcdevice.NewDescribeDeviceRequest(in.MasterDevName)
+	dev,err := i.ctldevice.DescribeDevice(ctx,querydev)
+	if err != nil {
+		return internet.CONFLICT,err
+	}
+	if dev.Brand == 3 
+
+}
