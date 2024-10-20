@@ -2,10 +2,13 @@ package impl
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/internet"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/rcdevice"
+	"github.com/fubieliangpu/WorkOrderDeployment/common"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
+	"github.com/fubieliangpu/WorkOrderDeployment/mtools"
 )
 
 // 冲突检测
@@ -138,10 +141,32 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 	}
 	//主设备查询
 	querydev := rcdevice.NewDescribeDeviceRequest(in.MasterDevName)
-	dev,err := i.ctldevice.DescribeDevice(ctx,querydev)
+	dev, err := i.ctldevice.DescribeDevice(ctx, querydev)
 	if err != nil {
-		return internet.CONFLICT,err
+		return internet.CONFLICT, err
 	}
-	if dev.Brand == 3 
+	if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
+		return internet.CONFLICT, internet.ErrBrandNotSupport
+	}
+
+	if dev.DeviceLevel != common.CORE {
+		mtools.CommandGenerator(
+			"VRRPCheckConfig",
+			"screen-length disable\n",
+			//Vrid check
+			"display vrrp\n",
+			//Vni check
+			fmt.Sprintf("display current-configuration | include %v\n", in.Vni),
+			//Vsi check
+			fmt.Sprintf("display l2vpn vsi name %v\n", in.Vname),
+			//Brige Port check
+			fmt.Sprintf("display interface Bridge-Aggregation %v\n", in.BridgePort),
+			//Tunnel Check
+			fmt.Sprintf("display interface brief description | include Tun.*%v\n", in.DestDevName),
+			"exit\n",
+		)
+	} else if dev.DeviceLevel == common.CORE {
+
+	}
 
 }
