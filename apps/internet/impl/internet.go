@@ -139,40 +139,96 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 	if err := in.Validate(); err != nil {
 		return internet.CONFLICT, exception.ErrValidateFailed(err.Error())
 	}
-	//主设备查询
-	querydev := rcdevice.NewDescribeDeviceRequest(in.MasterDevName)
-	dev, err := i.ctldevice.DescribeDevice(ctx, querydev)
-	if err != nil {
-		return internet.CONFLICT, err
-	}
-	if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
-		return internet.CONFLICT, internet.ErrBrandNotSupport
-	}
+	//主备设备查询
+	for _, v := range []string{in.MasterDevName, in.BackupDevName} {
+		querydev := rcdevice.NewDescribeDeviceRequest(v)
+		dev, err := i.ctldevice.DescribeDevice(ctx, querydev)
+		if err != nil {
+			return internet.CONFLICT, err
+		}
+		if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
+			return internet.CONFLICT, internet.ErrBrandNotSupport
+		}
+		//生成设备登录配置
+		cfi := rcdevice.NewConfigInfo()
+		cfi.Configfile = "VRRPCheckConfig"
+		cfi.Recordfile = "CheckRecord"
+		if _, err := rcdevice.LoadUsernmPasswdFromYaml("user.yaml", cfi.UserInfo); err != nil {
+			return internet.CONFLICT, err
+		}
+		cfi.Ip = dev.ServerAddr
+		cfi.Port = dev.Port
 
-	if dev.DeviceLevel != common.CORE {
-		mtools.CommandGenerator(
-			"VRRPCheckConfig",
-			"screen-length disable\n",
-			//Vrid check
-			fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
-			//routing-table check
-			fmt.Sprintf(
-				"display ip routing-table %v %v\ndisplay ip routing-table %v %v\n",
-				in.Detail.IpAddr,
-				in.Detail.IpMask,
-				in.Detail.NeighborIp,
-				in.Detail.NeighborMask,
-			),
-			//Vsi check
-			fmt.Sprintf("display l2vpn vsi name %v\n", in.Vname),
-			//Brige Port check
-			fmt.Sprintf("display interface Bridge-Aggregation %v\n", in.BridgePort),
-			//Tunnel Check
-			fmt.Sprintf("display interface brief description | include Tun.*%v\n", in.DestDevName),
-			"exit\n",
-		)
-	} else if dev.DeviceLevel == common.CORE {
+		//生成互联网关地址
+		gips := mtools.GetGatewayByIpStr(in.Detail.IpAddr, in.Detail.NeighborIp)
 
+		//分设备接入层级判断
+		if dev.DeviceLevel != common.CORE {
+			mtools.CommandGenerator(
+				cfi.Configfile,
+				"screen-length disable\n",
+				//Vrid check
+				fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
+				//routing-table check
+				fmt.Sprintf(
+					"display ip routing-table %v %v\ndisplay ip routing-table %v %v\n",
+					in.Detail.IpAddr,
+					in.Detail.IpMask,
+					in.Detail.NeighborIp,
+					in.Detail.NeighborMask,
+				),
+				//config check
+				fmt.Sprintf(
+					"display current-configuration | include %v\ndisplay current-configuration | include %v\ndisplay current-configuration | include %v\n",
+					in.Detail.IpAddr,
+					gips[0],
+					gips[1],
+				),
+				//因为是汇聚层或接入层，看不到全部路由，需要ping测，
+				//这时候判断两种情况:
+				//1.公网地址互联，本身网关配置在我司交换机上，则IP地址最后一位+1就是网关
+				//2.私网地址互联，本身网关配置在我司交换机上，但是使用的时私网地址下一跳，那么客户侧公网地址未必可ping，需要额外测试ping一个互联地址，互联地址+1就是我司交换机端口地址
+				//因此需要测试两个地址，公网地址段最后一位+1、私网地址段最后一位+1
+				//分割业务IP，切片最后一个元素转为数字后+1再转回来，在组成字符串
+				fmt.Sprintf(
+					"ping %v\nping %v\n",
+					gips[0],
+					gips[1],
+				),
+				//exit
+				"exit\n",
+			)
+			//登录设备查看
+			rcdevice.SshConfigTool(cfi)
+			err := mtools.Regexper(
+				cfi.Recordfile,
+				0,
+				//vrrp匹配
+				fmt.Sprintf("vrrp vrid %v virtual-ip .*", in.Vrid),
+				//路由匹配
+				fmt.Sprintf("%v/%v", in.Detail.IpAddr, in.Detail.IpMask),
+				fmt.Sprintf("%v/%v", in.Detail.NeighborIp, in.Detail.NeighborMask),
+				//设备配置匹配
+				fmt.Sprintf("ip route-static.*%v %v.*", in.Detail.IpAddr, in.Detail.IpMask),
+				fmt.Sprintf("ip address %v.*", gips[0]),
+				fmt.Sprintf("ip address %v.*", gips[1]),
+				//ping测结果判断
+				`, 0\.0% packet loss`,
+			)
+			//匹配到任意一个，就判定为冲突
+			if err == nil {
+				return internet.CONFLICT, internet.ErrRouteConflict
+			}
+
+		} else if dev.DeviceLevel == common.CORE {
+			//判断vpn-instance
+			mtools.CommandGenerator(
+				cfi.Configfile,
+				fmt.Sprintf("display ip vpn-instance instance-name %v\nexit\n", in.Detail.Operators),
+			)
+			//有vpn-instance如何判断
+			//没有vpn-instance
+		}
 	}
 
 }
