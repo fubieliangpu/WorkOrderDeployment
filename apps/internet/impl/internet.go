@@ -154,9 +154,15 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 			"VRRPCheckConfig",
 			"screen-length disable\n",
 			//Vrid check
-			"display vrrp\n",
-			//Vni check
-			fmt.Sprintf("display current-configuration | include %v\n", in.Vni),
+			fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
+			//routing-table check
+			fmt.Sprintf(
+				"display ip routing-table %v %v\ndisplay ip routing-table %v %v\n",
+				in.Detail.IpAddr,
+				in.Detail.IpMask,
+				in.Detail.NeighborIp,
+				in.Detail.NeighborMask,
+			),
 			//Vsi check
 			fmt.Sprintf("display l2vpn vsi name %v\n", in.Vname),
 			//Brige Port check
