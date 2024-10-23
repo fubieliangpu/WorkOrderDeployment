@@ -1,0 +1,15 @@
+{"level":"info","time":"2024/10/23 12:59:09 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 12:59:10 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:08:11 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:08:12 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:12:29 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:12:30 +0800","message":"Match content 'vrrp vrid 3 virtual-ip 172.18.15.7\r\r' by expression 'vrrp vrid 3 virtual-ip .*'"}
+{"level":"info","time":"2024/10/23 13:13:15 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:13:16 +0800","message":"Match content 'ip address 172.18.15.1 255.255.255.248\r\r' by expression 'ip address 172.18.15.1.*'"}
+{"level":"info","time":"2024/10/23 13:14:00 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:14:01 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:14:02 +0800","message":"Match content 'vrrp vrid 3 virtual-ip 172.18.15.7\r\r' by expression 'vrrp vrid 3 virtual-ip .*'"}
+{"level":"info","time":"2024/10/23 13:17:30 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:17:31 +0800","message":"Match content 'CD-CMCC' by expression 'CD-CMCC'"}
+{"level":"info","time":"2024/10/23 13:17:31 +0800","message":"Match content 'ip route-static vpn-instance CD-CMCC 112.45.33.0 27 172.18.15.4\r\r' by expression 'ip route-static.*112.45.33.0 27.*'"}
+{"level":"info","time":"2024/10/23 13:19:20 +0800","message":"Match content 'ip route-static vpn-instance CD-CMCC 112.45.33.0 27 172.18.15.4\r\r' by expression 'ip route-static.*112.45.33.0 27.*'"}

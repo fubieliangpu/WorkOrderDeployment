@@ -146,13 +146,14 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 		if err != nil {
 			return internet.CONFLICT, err
 		}
-		if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
+		if dev.Brand < common.H3C || dev.Brand > common.Huawei_CE {
 			return internet.CONFLICT, internet.ErrBrandNotSupport
 		}
 		//生成设备登录配置
 		cfi := rcdevice.NewConfigInfo()
 		cfi.Configfile = "VRRPCheckConfig.cnf"
 		cfi.Recordfile = "CheckRecord.log"
+		cfi.UserInfo = rcdevice.NewDeviceUserInfo()
 		if _, err := rcdevice.LoadUsernmPasswdFromYaml("user.yaml", cfi.UserInfo); err != nil {
 			return internet.CONFLICT, err
 		}
@@ -226,12 +227,13 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 				cfi.Configfile,
 				"display ip vpn-instance\nexit\n",
 			)
+			rcdevice.SshConfigTool(cfi)
 			//有vpn-instance如何判断
 			if err := mtools.Regexper(cfi.Recordfile, 0, in.Detail.Operators); err == nil {
 				mtools.CommandGenerator(
 					cfi.Configfile,
 					"screen-length disable\n",
-					fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
+					fmt.Sprintf("display current-configuration | include vrrp.vrid.%v.*\n", in.Vrid),
 					fmt.Sprintf("display ip routing-table vpn-instance %v %v %v\n", in.Detail.Operators, in.Detail.IpAddr, in.Detail.IpMask),
 					fmt.Sprintf("display ip routing-table vpn-instance %v %v %v\n", in.Detail.Operators, in.Detail.NeighborIp, in.Detail.NeighborMask),
 					fmt.Sprintf(
@@ -263,7 +265,7 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 				mtools.CommandGenerator(
 					cfi.Configfile,
 					"screen-length disable\n",
-					fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
+					fmt.Sprintf("display current-configuration | include vrrp.vrid.%v.*\n", in.Vrid),
 					fmt.Sprintf("display ip routing-table %v %v\n", in.Detail.IpAddr, in.Detail.IpMask),
 					fmt.Sprintf("display ip routing-table %v %v\n", in.Detail.NeighborIp, in.Detail.NeighborMask),
 					fmt.Sprintf(
@@ -307,13 +309,14 @@ func (i *NetProdDeplImpl) DoubleStaticConflictCheck(ctx context.Context, in *int
 		if err != nil {
 			return internet.CONFLICT, err
 		}
-		if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
+		if dev.Brand < common.H3C || dev.Brand > common.Huawei_CE {
 			return internet.CONFLICT, internet.ErrBrandNotSupport
 		}
 		//生成设备登录配置
 		cfi := rcdevice.NewConfigInfo()
 		cfi.Configfile = "DoubleCheckConfig.cnf"
 		cfi.Recordfile = "CheckRecord.log"
+		cfi.UserInfo = rcdevice.NewDeviceUserInfo()
 		if _, err := rcdevice.LoadUsernmPasswdFromYaml("user.yaml", cfi.UserInfo); err != nil {
 			return internet.CONFLICT, err
 		}
@@ -382,6 +385,7 @@ func (i *NetProdDeplImpl) DoubleStaticConflictCheck(ctx context.Context, in *int
 				cfi.Configfile,
 				"display ip vpn-instance\nexit\n",
 			)
+			rcdevice.SshConfigTool(cfi)
 			//有vpn-instance如何判断
 			if err := mtools.Regexper(cfi.Recordfile, 0, in.Detail.Operators); err == nil {
 				mtools.CommandGenerator(
@@ -457,7 +461,7 @@ func (i *NetProdDeplImpl) SingleConflictCheck(ctx context.Context, in *internet.
 	if err != nil {
 		return internet.CONFLICT, err
 	}
-	if dev.Brand != common.H3C || dev.Brand != common.Huawei || dev.Brand != common.Huawei_CE {
+	if dev.Brand < common.H3C || dev.Brand > common.Huawei_CE {
 		return internet.CONFLICT, internet.ErrBrandNotSupport
 	}
 	//生成设备登录配置
@@ -532,6 +536,7 @@ func (i *NetProdDeplImpl) SingleConflictCheck(ctx context.Context, in *internet.
 			cfi.Configfile,
 			"display ip vpn-instance\nexit\n",
 		)
+		rcdevice.SshConfigTool(cfi)
 		//有vpn-instance如何判断
 		if err := mtools.Regexper(cfi.Recordfile, 0, in.Detail.Operators); err == nil {
 			mtools.CommandGenerator(

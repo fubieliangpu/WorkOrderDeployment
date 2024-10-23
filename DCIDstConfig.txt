@@ -1,4 +1,0 @@
-system-view
-undo vlan 2224
-return
-exit

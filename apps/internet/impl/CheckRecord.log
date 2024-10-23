@@ -4,13 +4,10 @@
 * no decompiling or reverse-engineering shall be allowed.                    *
 ******************************************************************************
 
-<H3C>screen-length disable
-<H3C>display vlan 2224
-This VLAN does not exist.
-<H3C>display current-configuration | include 2224
-<H3C>display l2vpn vsi name HYC-01-SZJY-01-01-SZCT-2224
-<H3C>display interface Bridge-Aggregation 6
-                       ^
- % Wrong parameter found at '^' position.
-<H3C>display interface brief description | include Tun.*SZ-HYC-1L-1-051-V-S6800-01
-<H3C>exit
+<Backup>screen-length disable
+<Backup>display ip routing-table 112.45.33.0 27
+<Backup>display ip routing-table 172.18.15.0 29
+<Backup>display current-configuration | include 112.45.33.0
+<Backup>display current-configuration | include 112.45.33.1
+<Backup>display current-configuration | include 172.18.15.1
+<Backup>exit
