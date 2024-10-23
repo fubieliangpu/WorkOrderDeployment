@@ -59,16 +59,79 @@ func TestVrrpConflictCheck(t *testing.T) {
 	t.Log(ins)
 }
 
+func TestDoubleStaticConflictCheck(t *testing.T) {
+	req := internet.NewDeploymentDoubleStatic()
+	req.FirstDevName = "FS-ZHXC-3L-HH08-04-X-S9850-03"
+	req.SecondDevName = "FS-ZHXC-3L-HH08-05-X-S9850-04"
+	req.Detail.Operators = "CD-CT"
+	req.Detail.IpAddr = "112.45.34.0"
+	req.Detail.IpMask = "27"
+	req.Detail.NeighborIp = "172.18.15.0"
+	req.Detail.NeighborMask = "29"
+	ins, err := serviceImpl.DoubleStaticConflictCheck(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
+func TestSingleConflictCheck(t *testing.T) {
+	req := internet.NewDeploymentSingle()
+	req.DevName = "FS-ZHXC-3L-HH08-04-X-S9850-03"
+	req.Detail.Operators = "CD-CMCC"
+	req.Detail.IpAddr = "112.45.29.0"
+	req.Detail.IpMask = "27"
+	req.Detail.NeighborIp = "172.18.15.0"
+	req.Detail.NeighborMask = "30"
+	ins, err := serviceImpl.SingleConflictCheck(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
+func TestVrrpDeployment(t *testing.T) {
+	req := internet.NewDeploymentVRRP()
+	req.MasterDevName = "FS-ZHXC-3L-HH08-04-X-S9850-03"
+	req.BackupDevName = "FS-ZHXC-3L-HH08-05-X-S9850-04"
+	req.Vrid = 5
+	req.Detail.IpAddr = "112.45.34.0"
+	req.Detail.IpMask = "27"
+	req.Detail.NeighborIp = "172.18.16.0"
+	req.Detail.NeighborMask = "29"
+	req.Detail.Operators = "CD-CMCC"
+	ins, err := serviceImpl.VrrpDeployment(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
 func TestDoubleStaticDeployment(t *testing.T) {
 	req := internet.NewDeploymentDoubleStatic()
-	req.FirstDevName = "SC-CDJF-IDC2-D13-X-S8861-01"
-	req.SecondDevName = "SC-CDJF-IDC2-D13-X-S8861-02"
+	req.FirstDevName = "FS-ZHXC-3L-HH08-04-X-S9850-03"
+	req.SecondDevName = "FS-ZHXC-3L-HH08-05-X-S9850-04"
 	req.Detail.Operators = "CD-CT"
 	req.Detail.IpAddr = "112.45.33.0"
 	req.Detail.IpMask = "27"
 	req.Detail.NeighborIp = "172.18.15.0"
 	req.Detail.NeighborMask = "29"
-	ins, err := serviceImpl.DoubleStaticConflictCheck(ctx, req)
+	ins, err := serviceImpl.DoubleStaticDeployment(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
+func TestSingleDeployment(t *testing.T) {
+	req := internet.NewDeploymentSingle()
+	req.DevName = "FS-ZHXC-3L-HH08-04-X-S9850-03"
+	req.Detail.Operators = "CD-CMCC"
+	req.Detail.IpAddr = "112.45.29.0"
+	req.Detail.IpMask = "27"
+	req.Detail.NeighborIp = "172.18.15.0"
+	req.Detail.NeighborMask = "30"
+	ins, err := serviceImpl.SingleDeployment(ctx, req)
 	if err != nil {
 		t.Fatal(err)
 	}

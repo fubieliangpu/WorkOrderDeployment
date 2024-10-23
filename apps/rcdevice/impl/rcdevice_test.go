@@ -10,12 +10,12 @@ import (
 
 func TestCreateDevice(t *testing.T) {
 	req := rcdevice.NewCreateDeviceRequest()
-	req.Name = "SC-CDJF-IDC2-D13-X-S8861-02"
+	req.Name = "FS-ZHXC-3L-HH08-05-X-S9850-04"
 	req.ServerAddr = "10.172.0.124"
 	req.Port = "22"
-	req.Brand = common.Huawei_CE
-	req.Idc = "CD"
-	req.DeviceLevel = common.CORE
+	req.Brand = common.H3C
+	req.Idc = "FSZHXC"
+	req.DeviceLevel = common.CONVERGE
 	ins, err := serviceImpl.CreateDevice(ctx, req)
 	if err != nil {
 		t.Fatal(err)
