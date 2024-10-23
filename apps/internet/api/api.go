@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/internet"
+	"github.com/fubieliangpu/WorkOrderDeployment/conf"
 	"github.com/fubieliangpu/WorkOrderDeployment/ioc"
 )
 
@@ -16,8 +17,8 @@ type InternetApiHandler struct {
 func (h *InternetApiHandler) Init() error {
 	h.svc = ioc.Controller.Get(internet.AppName).(internet.Service)
 	//注册Root Router
-	// subRouter := conf.C().Application.GinRootRouter().Group("internet")
+	subRouter := conf.C().Application.GinRootRouter().Group("internet")
 	//Registory
-	// h.Registry(subRouter)
+	h.Registry(subRouter)
 	return nil
 }
