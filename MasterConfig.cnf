@@ -1,0 +1,10 @@
+system-view
+vlan 200
+ip vpn-instance CD-CNC
+interface vlan 200
+  ip binding vpn-instance CD-CNC
+  ip add 112.71.71.2 28
+  vrrp vrid 6 virtual-ip 112.71.71.1
+  vrrp vrid 6 priority 120
+return
+exit

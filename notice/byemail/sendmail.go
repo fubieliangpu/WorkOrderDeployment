@@ -8,16 +8,20 @@ import (
 	"net/smtp"
 	"os"
 
+	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 	"github.com/jordan-wright/email"
+	"gopkg.in/yaml.v3"
 )
 
 // 把需要认证的信息放在结构体中
 type MailAuthInfo struct {
-	Identity      string
-	SendAddress   string
-	AuthorizeCode string
-	ServerHost    string
-	ServerPort    string
+	Identity      string `toml:"identity" yaml:"identity" json:"identity"`
+	SendAddress   string `toml:"sendaddr" yaml:"sendaddr" json:"sendaddr"`
+	AuthorizeCode string `toml:"authorizecode" yaml:"authorizecode" json:"authorizecode"`
+	ServerHost    string `toml:"serverhost" yaml:"serverhost" json:"serverhost"`
+	ServerPort    string `toml:"serverport" yaml:"serverport" json:"serverport"`
+	//补充收件信息
+	RecvAddress string `toml:"revcaddr" yaml:"revcaddr" json:"revcaddr"`
 }
 
 func NewMailAuthInfo() *MailAuthInfo {
@@ -53,4 +57,19 @@ func MyNewEmail(filename string) *email.Email {
 			return &content
 		}(filename),
 	}
+}
+
+// 从指定yaml文件中加载邮件认证信息
+func (m *MailAuthInfo) LoadEmailAuthInfoFromYaml(filename string) (*MailAuthInfo, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, exception.ErrOpenFileFailed(err.Error())
+	}
+
+	err = yaml.Unmarshal(content, m)
+	if err != nil {
+		return nil, exception.ErrParseFileFailed(err.Error())
+	}
+
+	return m, nil
 }

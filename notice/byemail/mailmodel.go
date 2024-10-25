@@ -21,6 +21,7 @@ func (p *Page) String() string {
 	return string(dj)
 }
 
+// 通过HTML模版文件生成邮件回复正文的HTML文件
 func (p *Page) GenHTMLFromModel(modelfile, htmlfile string) error {
 	tmpl, err := template.ParseFiles(modelfile)
 	if err != nil {

@@ -45,7 +45,7 @@ func (i *NetProdDeplImpl) VrrpConflictCheck(ctx context.Context, in *internet.De
 				cfi.Configfile,
 				"screen-length disable\n",
 				//Vrid check
-				fmt.Sprintf("display current-configuration | include vrrp.vrid.%v .\n", in.Vrid),
+				fmt.Sprintf("display current-configuration | include vrrp.vrid.%v.*\n", in.Vrid),
 				//routing-table check
 				fmt.Sprintf(
 					"display ip routing-table %v %v\ndisplay ip routing-table %v %v\n",

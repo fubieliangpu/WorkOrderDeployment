@@ -1,12 +1,16 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/internet"
 	"github.com/fubieliangpu/WorkOrderDeployment/apps/user"
 	"github.com/fubieliangpu/WorkOrderDeployment/exception"
 	"github.com/fubieliangpu/WorkOrderDeployment/middleware"
+	"github.com/fubieliangpu/WorkOrderDeployment/notice/byemail"
 	"github.com/fubieliangpu/WorkOrderDeployment/response"
 	"github.com/gin-gonic/gin"
+	"github.com/jordan-wright/email"
 )
 
 func (h *InternetApiHandler) Registry(appRouter gin.IRouter) {
@@ -88,7 +92,33 @@ func (h *InternetApiHandler) VrrpDeployment(ctx *gin.Context) {
 	if err != nil {
 		response.Failed(err, ctx)
 	}
+	//构建邮件认证信息
+	mauthinfo := byemail.NewMailAuthInfo()
+	if _, err := mauthinfo.LoadEmailAuthInfoFromYaml("mailauth.yaml"); err != nil {
+		response.Failed(err, ctx)
+	}
+	//构建邮件发送的内容
+	msg := fmt.Sprintf(
+		"VRRP下发结果\n运营商: %v\n业务IP: %v/%v\n互联IP段: %v/%v\n下发设备: %v,%v\n配置下发完成,请登陆设备检查结果!\n",
+		req.Detail.Operators,
+		req.Detail.IpAddr,
+		req.Detail.IpMask,
+		req.Detail.NeighborIp,
+		req.Detail.NeighborMask,
+		req.MasterDevName,
+		req.BackupDevName,
+	)
+	//构建邮件对象
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("WorkOrderNotice <%v>", mauthinfo.SendAddress)
+	e.Subject = "业务下发结果"
+	e.To = []string{mauthinfo.RecvAddress}
+	e.Text = []byte(msg)
 
+	//发送邮件
+	if err := mauthinfo.MySendmail(e); err != nil {
+		response.Failed(err, ctx)
+	}
 	//返回结果
 	response.Success(result, ctx)
 }
@@ -108,6 +138,32 @@ func (h *InternetApiHandler) DoubleStaticDeployment(ctx *gin.Context) {
 		response.Failed(err, ctx)
 	}
 
+	//构建邮件认证信息
+	mauthinfo := byemail.NewMailAuthInfo()
+	if _, err := mauthinfo.LoadEmailAuthInfoFromYaml("mailauth.yaml"); err != nil {
+		response.Failed(err, ctx)
+	}
+	//构建邮件发送的内容
+	msg := fmt.Sprintf(
+		"运营商：%v\n业务IP: %v/%v\n互联IP段: %v/%v\n下发设备: %v,%v\n配置下发完成,请登陆设备检查结果!\n",
+		req.Detail.Operators,
+		req.Detail.IpAddr,
+		req.Detail.IpMask,
+		req.Detail.NeighborIp,
+		req.Detail.NeighborMask,
+		req.FirstDevName,
+		req.SecondDevName,
+	)
+	//构建邮件对象
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("WorkOrderNotice <%v>", mauthinfo.SendAddress)
+	e.Subject = "业务下发结果"
+	e.To = []string{mauthinfo.RecvAddress}
+	e.Text = []byte(msg)
+	//发送邮件
+	if err := mauthinfo.MySendmail(e); err != nil {
+		response.Failed(err, ctx)
+	}
 	//返回结果
 	response.Success(result, ctx)
 }
@@ -124,6 +180,32 @@ func (h *InternetApiHandler) SingleDeployment(ctx *gin.Context) {
 
 	result, err := h.svc.SingleDeployment(ctx.Request.Context(), req)
 	if err != nil {
+		response.Failed(err, ctx)
+	}
+
+	//构建邮件认证信息
+	mauthinfo := byemail.NewMailAuthInfo()
+	if _, err := mauthinfo.LoadEmailAuthInfoFromYaml("mailauth.yaml"); err != nil {
+		response.Failed(err, ctx)
+	}
+	//构建邮件发送的内容
+	msg := fmt.Sprintf(
+		"运营商：%v\n业务IP: %v/%v\n互联IP段: %v/%v\n下发设备: %v\n配置下发完成,请登陆设备检查结果!\n",
+		req.Detail.Operators,
+		req.Detail.IpAddr,
+		req.Detail.IpMask,
+		req.Detail.NeighborIp,
+		req.Detail.NeighborMask,
+		req.DevName,
+	)
+	//构建邮件对象
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("WorkOrderNotice <%v>", mauthinfo.SendAddress)
+	e.Subject = "业务下发结果"
+	e.To = []string{mauthinfo.RecvAddress}
+	e.Text = []byte(msg)
+	//发送邮件
+	if err := mauthinfo.MySendmail(e); err != nil {
 		response.Failed(err, ctx)
 	}
 
