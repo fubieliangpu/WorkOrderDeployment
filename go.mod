@@ -33,7 +33,7 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.8.0 // indirect
-	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
@@ -46,6 +46,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-ping/ping v1.1.0
 	github.com/go-playground/validator/v10 v10.22.1
+	github.com/go-resty/resty/v2 v2.15.3
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.33.0
